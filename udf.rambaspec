@@ -1,0 +1,20 @@
+# Template information section
+name: "udf"
+summary: "SwiftUI-UDF template. Used in 'You are launched'"
+author: "Max Kuznetsov"
+version: "1.0.0"
+license: "MIT"
+
+# The declarations for code files
+
+code_files:
+# View layer
+- {name: View/Container.swift,  path: Code/View/container.swift.liquid}
+- {name: View/Component.swift, path: Code/View/component.swift.liquid}
+
+# State layer
+- {name: State/Form.swift, path: Code/State/form.swift.liquid}
+- {name: State/Flow.swift, path: Code/State/flow.swift.liquid}
+
+# Side effect (Async) layer
+- {name: Middleware.swift, path: Code/Async/middleware.swift.liquid}

@@ -1,0 +1,18 @@
+{% include 'header' %}
+
+import SwiftUI
+import SwiftUI_UDF
+
+struct {{ module_info.name }}Container: Container {
+    typealias ContainerComponent = {{ module_info.name }}Component
+    
+    func map(state: AppState, store: AppEnvironmentStore) -> ContainerComponent.Props {
+        .init(
+            
+        )
+    }
+    
+    func onContainerAppear(store: EnvironmentStore<AppState>) {
+
+    }
+}

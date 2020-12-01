@@ -1,0 +1,21 @@
+{% include 'header' %}
+
+import Foundation
+import SwiftUI_UDF
+
+enum {{ module_info.name }}Flow: IdentifiableFlow {
+    case none, loading
+    
+    init() { self = .none }
+    
+    mutating func reduce(_ action: AnyAction) {
+        switch action.value {
+            
+        case let action as AnyAction.Error where action.id == {{ module_info.name }}Flow.id:
+            self = .none
+            
+        default:
+            break
+        }
+    }
+}

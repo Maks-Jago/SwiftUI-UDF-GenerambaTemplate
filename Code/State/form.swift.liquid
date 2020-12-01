@@ -1,0 +1,17 @@
+{% include 'header' %}
+
+import Foundation
+import SwiftUI_UDF
+
+struct {{ module_info.name }}Form: Reducible {
+    var error: String? = nil
+    
+    mutating func reduce(_ action: AnyAction) {
+        switch action.value {
+        case let action as AnyAction.Error where action.id == {{ module_info.name }}Flow.id:
+            error = action.error
+        default:
+            break
+        }
+    }
+}
