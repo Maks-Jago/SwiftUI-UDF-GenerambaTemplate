@@ -9,7 +9,7 @@ license: "MIT"
 
 code_files:
 # View layer
-- {name: View/Container.swift,  path: Code/View/container.swift.liquid}
+- {name: View/Container.swift, path: Code/View/container.swift.liquid}
 - {name: View/Component.swift, path: Code/View/component.swift.liquid}
 
 # State layer
