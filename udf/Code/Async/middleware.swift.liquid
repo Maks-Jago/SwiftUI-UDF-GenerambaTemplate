@@ -1,59 +1,18 @@
 {% include 'header' %}
 
-import Combine
 import SwiftUI_UDF
 import SwiftUI
 
-struct {{ module_info.name }}Middleware: Middleware {
-    var store: AppStore
+final class {{ module_info.name }}Middleware: SyncMiddleware<AppState> {
 
-    @Boxed private var cancellable: AnyCancellable? = nil
-    var queue = DispatchQueue(label: "Load {{ module_info.name }} queue")
-
-    var asObserver: Observer<AppState> {
-        Observer(queue: queue) { state in
-            self.observe(state: state)
-            return .active
-        }
-    }
-
-    func observe(state: AppState) {
-        guard cancellable == nil else {
-            return
-        }
-
+    override func observe(state: AppState) {
         switch state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1,module_info.name.size }}Flow {
         case .loading:
-            let load{{ module_info.name }}Effect = Load{{ module_info.name }}Effect(
-                queue: queue,
-                errorId: {{ module_info.name }}Flow.id
-            )
-            
-            self.cancellable = load{{ module_info.name }}Effect.upstream().sink { action in
-                self.cancellable = nil
-                self.store.dispatch(action: action)
-            }
+            //Run your load effect here. Replace `API.load()` to your publisher
+            execute(Effect(API.load(), id: {{ module_info.name }}Flow.id))
             
         default:
             break
         }
-    }
-}
-
-struct Load{{ module_info.name }}Effect<ErrorId: Hashable>: Effect {
-    let queue: DispatchQueue
-    let errorId: ErrorId
-
-    init(queue: DispatchQueue = DispatchQueue(label: "Load {{ module_info.name }} queue"), errorId: ErrorId) {
-        self.queue = queue
-        self.errorId = errorId
-    }
-
-    func upstream() -> AnyPublisher<AnyAction, Never> {
-        Just(errorId)
-            .receive(on: queue)
-            .map { AnyAction.Error(error: "MAP ME", id: $0).eraseToAnyAction() }
-            .catch { Just(AnyAction.Error(error: $0.localizedDescription, id: self.errorId).eraseToAnyAction()) }
-            .eraseToAnyPublisher()
     }
 }

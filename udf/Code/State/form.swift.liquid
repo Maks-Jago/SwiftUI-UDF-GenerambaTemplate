@@ -10,6 +10,7 @@ struct {{ module_info.name }}Form: Reducible {
         switch action.value {
         case let action as AnyAction.Error where action.id == {{ module_info.name }}Flow.id:
             error = action.error
+            
         default:
             break
         }
