@@ -19,7 +19,7 @@ struct All<# {{ module_info.name }} #>: Reducible {
         case let action as Actions.DidUpdateItem<{{ module_info.name }}>:
             byId[action.item.id] = action.item
             
-        case let action as AnyAction.DeleteItem<{{ module_info.name }}>:
+        case let action as Actions.DeleteItem<{{ module_info.name }}>:
             byId.removeValue(forKey: action.item.id)
             
         default:
