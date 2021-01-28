@@ -1,0 +1,11 @@
+# Template information section
+name: "udf-storage"
+summary: "SwiftUI-UDF storage template. Used in 'You are launched'"
+author: "Max Kuznetsov"
+version: "1.0.0"
+license: "MIT"
+
+# The declarations for code files
+
+code_files:
+- {name: Storage.swift, path: Code/storage.swift.liquid}

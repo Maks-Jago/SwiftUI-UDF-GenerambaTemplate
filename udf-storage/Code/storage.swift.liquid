@@ -1,0 +1,29 @@
+{% include 'header' %}
+
+import Foundation
+import SwiftUI_UDF
+
+struct All<# {{ module_info.name }} #>: Reducible {
+    var byId: [{{ module_info.name }}.Id: {{ module_info.name }}] = [:]
+    
+    mutating func reduce(_ action: AnyAction) {
+        switch action.value {
+        case let action as Actions.DidLoadItems<{{ module_info.name }}>:
+            action.items.forEach {
+                byId[$0.id] = $0
+            }
+            
+        case let action as Actions.DidLoadItem<{{ module_info.name }}>:
+            byId[action.item.id] = action.item
+            
+        case let action as Actions.DidUpdateItem<{{ module_info.name }}>:
+            byId[action.item.id] = action.item
+            
+        case let action as AnyAction.DeleteItem<{{ module_info.name }}>:
+            byId.removeValue(forKey: action.item.id)
+            
+        default:
+            break
+        }
+    }
+}

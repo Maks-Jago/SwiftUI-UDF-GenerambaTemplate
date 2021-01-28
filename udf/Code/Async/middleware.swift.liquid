@@ -9,7 +9,7 @@ final class {{ module_info.name }}Middleware: SyncMiddleware<AppState> {
         switch state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1,module_info.name.size }}Flow {
         case .loading:
             //Run your load effect here. Replace `API.load()` to your publisher
-            execute(Effect(API.load(), id: {{ module_info.name }}Flow.id))
+            execute(Effect(<#API.LoadPublisher()#>, id: {{ module_info.name }}Flow.id))
             
         default:
             break
