@@ -8,28 +8,30 @@ enum AuthFlow: IdentifiableFlow {
     
     init() { self = .none }
     
+    static var signInId: Flows.Id = .init(value: "SignIn")
+    static var signUpId: Flows.Id = .init(value: "SignUp")
+    static var forgotPasswordId: Flows.Id = .init(value: "ForgotPassword")
+    
     mutating func reduce(_ action: AnyAction) {
         switch action.value {
-
-        case let action as AnyAction.Error where action.id == ForgotPasswordForm.id:
-            self = .none
-        case is AnyAction.SendForgotPassword:
+        
+        case is Actions.SendForgotPassword:
             self = .forgotPassword
-        case is AnyAction.UpdateForgotPasswordIsFinished:
+        case is Actions.UpdateForgotPasswordIsFinished:
             self = .none
-        case is AnyAction.SetUserSignedIn:
+        case is Actions.SetUserSignedIn:
             self = .none
-        case is AnyAction.SignIn:
+        case is Actions.SignIn:
             self = .signIn
-        case is AnyAction.SignUp:
+        case is Actions.SignUp:
             self = .signUp
-        case is AnyAction.UserSignedUp:
+        case is Actions.UserSignedUp:
             self = .none
-        case let action as AnyAction.Error where action.id == SignUpForm.id:
-            self = .none
-        case let action as AnyAction.Error where action.id == SignInForm.id:
-            self = .none
-
+            
+        case let action as Actions.Error where action.id == Self.forgotPasswordId: self = .none
+        case let action as Actions.Error where action.id == Self.signUpId: self = .none
+        case let action as Actions.Error where action.id == Self.signInId: self = .none
+            
         default:
             break
         }

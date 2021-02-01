@@ -4,122 +4,78 @@ import Combine
 import SwiftUI_UDF
 import SwiftUI
 
-struct AuthMiddleware: Middleware {
-    var store: AppStore
-
-    @Boxed private var cancellable: AnyCancellable? = nil
-    var queue = DispatchQueue(label: "Auth queue")
-
-    var asObserver: Observer<AppState> {
-        Observer(queue: queue) { state in
-            self.observe(state: state)
-            return .active
-        }
-    }
+final class AuthMiddleware: SyncMiddleware<AppState> {
     
-    func observe(state: AppState) {
-        guard cancellable == nil else {
-            return
-        }
-        
+    override func observe(state: AppState) {
         switch state.authFlow {
         case .forgotPassword:
-            let forgotPasswordEffect = ForgotPasswordEffect(queue: queue, email: state.forgotPasswordForm.email, errorId: ForgotPasswordForm.id)
+            execute(ForgotPasswordEffect(email: state.forgotPasswordForm.email, errorId: AuthFlow.forgotPasswordId))
             
-            self.cancellable = forgotPasswordEffect.upstream().sink { action in
-                self.cancellable = nil
-                self.store.dispatch(action: action)
-            }
         case .signIn:
-            let signInEffect = SignInEffect(queue: queue, email: state.signInForm.email, password: state.signInForm.password, errorId: SignInForm.id)
-            
-            self.cancellable = signInEffect.upstream().sink { action in
-                self.cancellable = nil
-                self.store.dispatch(action: action)
-            }
+            execute(SignInEffect(email: state.signInForm.email, password: state.signInForm.password, errorId: AuthFlow.signInId))
             
         case .signUp:
-            let signInEffect = SignUpEffect(queue: queue, name: state.signUpForm.name, email: state.signUpForm.email, password: state.signUpForm.password, errorId: SignUpForm.id)
+            execute(SignUpEffect(name: state.signUpForm.name, email: state.signUpForm.email, password: state.signUpForm.password, errorId: AuthFlow.signUpId))
             
-            self.cancellable = signInEffect.upstream().sink { action in
-                self.cancellable = nil
-                self.store.dispatch(action: action)
-            }
-        
         default:
             break
         }
     }
 }
 
-struct ForgotPasswordEffect<ErrorId: Hashable>: Effect {
-    let queue: DispatchQueue
+struct ForgotPasswordEffect<ErrorId: Hashable>: Effectable {
     let email: String
     let errorId: ErrorId
-
-    init(queue: DispatchQueue = DispatchQueue(label: "Auth queue"), email: String, errorId: ErrorId) {
-        self.queue = queue
+    
+    init(email: String, errorId: ErrorId) {
         self.email = email
         self.errorId = errorId
     }
     
-    func upstream() -> AnyPublisher<AnyAction, Never> {
+    var upstream: AnyPublisher<AnyAction, Never> {
         AuthAPIClient.forgotPublisher(email: email)
-            .receive(on: queue)
-            .map {AnyAction.UpdateForgotPasswordIsFinished(finished: true).eraseToAnyAction() }
+            .map { AnyAction.UpdateForgotPasswordIsFinished(finished: true).eraseToAnyAction() }
             .catch { Just(AnyAction.Error(error: $0.localizedDescription, id: self.errorId).eraseToAnyAction()) }
             .eraseToAnyPublisher()
     }
 }
 
-struct SignInEffect<ErrorId: Hashable>: Effect {
-    let queue: DispatchQueue
+struct SignInEffect<ErrorId: Hashable>: Effectable {
     let email: String
     let password: String
     let errorId: ErrorId
-
-    init(queue: DispatchQueue = DispatchQueue(label: "Auth queue"), email: String, password: String, errorId: ErrorId) {
-        self.queue = queue
+    
+    init(email: String, password: String, errorId: ErrorId) {
         self.email = email
         self.password = password
         self.errorId = errorId
     }
     
-    func upstream() -> AnyPublisher<AnyAction, Never> {
+    var upstream: AnyPublisher<AnyAction, Never> {
         AuthAPIClient.signInPublisher(email: email, password: password)
-            .receive(on: queue)
             .map { AnyAction.SetUserSignedIn(user: $0.asUser).eraseToAnyAction() }
             .catch { Just(AnyAction.Error(error: $0.localizedDescription, id: self.errorId).eraseToAnyAction()) }
             .eraseToAnyPublisher()
     }
 }
 
-struct SignUpEffect<ErrorId: Hashable>: Effect {
-    let queue: DispatchQueue
+struct SignUpEffect<ErrorId: Hashable>: Effectable {
     let email: String
     let name: String
     let password: String
     let errorId: ErrorId
-
-    init(queue: DispatchQueue = DispatchQueue(label: "Auth queue"), name: String, email: String, password: String, errorId: ErrorId) {
-        self.queue = queue
+    
+    init(name: String, email: String, password: String, errorId: ErrorId) {
         self.name = name
         self.email = email
         self.password = password
         self.errorId = errorId
     }
     
-    func upstream() -> AnyPublisher<AnyAction, Never> {
+    var upstream: AnyPublisher<AnyAction, Never> {
         AuthAPIClient.signUpPublisher(name: self.name, email: self.email, password: password)
-            .receive(on: queue)
             .map { AnyAction.UserSignedUp().eraseToAnyAction() }
             .catch { Just(AnyAction.Error(error: $0.localizedDescription, id: self.errorId).eraseToAnyAction()) }
             .eraseToAnyPublisher()
-    }
-}
-
-fileprivate extension UserStorable {
-    var asUser: User {
-        .init(token: token, id: id, name: name, email: email, avatar: avatar)
     }
 }
