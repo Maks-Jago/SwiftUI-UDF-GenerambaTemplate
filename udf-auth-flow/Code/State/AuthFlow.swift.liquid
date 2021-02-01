@@ -8,9 +8,9 @@ enum AuthFlow: IdentifiableFlow {
     
     init() { self = .none }
     
-    static var signInId: Flows.Id = .init(value: "SignIn")
-    static var signUpId: Flows.Id = .init(value: "SignUp")
-    static var forgotPasswordId: Flows.Id = .init(value: "ForgotPassword")
+    static var signInId: FlowId = .init(value: "SignIn")
+    static var signUpId: FlowId = .init(value: "SignUp")
+    static var forgotPasswordId: FlowId = .init(value: "ForgotPassword")
     
     mutating func reduce(_ action: AnyAction) {
         switch action.value {
