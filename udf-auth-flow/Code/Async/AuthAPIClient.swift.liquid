@@ -10,9 +10,9 @@ public enum AuthAPIClient {
         
         let parameters: [String: Any] = [
             URLParameter.name.rawValue: name,
-                                         URLParameter.email.rawValue: email.lowercased(),
-                                         URLParameter.password.rawValue: password,
-                                         ]
+            URLParameter.email.rawValue: email.lowercased(),
+            URLParameter.password.rawValue: password,
+        ]
         
         request.httpBody = encode(parameters, for: .post)
         return URLSession.shared
