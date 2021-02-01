@@ -2,18 +2,18 @@
 
 import Foundation
 
-struct UserStorable: Codable {
-    var token: String
-    var id: Int
-    var name: String
-    var email: String
-    var avatar: String
+public struct UserStorable: Codable {
+    public var token: String
+    public var id: Int
+    public var name: String
+    public var email: String
+    public  var avatar: String
 }
 
 // MARK: - CodingKey
 extension UserStorable {
     
-     enum CodingKeys: String, CodingKey {
+    public  enum CodingKeys: String, CodingKey {
         case token, id, name, email, avatar
     }
 }

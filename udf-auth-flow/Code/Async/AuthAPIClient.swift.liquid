@@ -2,9 +2,10 @@
 
 import Foundation
 import Combine
+import SwiftFoundation
 
-enum AuthAPIClient {
-    static func signUpPublisher(name: String, email: String, password: String) -> AnyPublisher<Void, Error> {
+public enum AuthAPIClient {
+    public static func signUpPublisher(name: String, email: String, password: String) -> AnyPublisher<Void, Error> {
         var request = URLRequest.request(for: .registration, httpMethod: .post)
         
         let parameters: [String: Any] = [
@@ -20,7 +21,7 @@ enum AuthAPIClient {
             .eraseToAnyPublisher()
     }
     
-    static func signInPublisher(email: String, password: String) -> AnyPublisher<UserStorable, Error> {
+    public static func signInPublisher(email: String, password: String) -> AnyPublisher<UserStorable, Error> {
         var request = URLRequest.request(for: .session, httpMethod: .post)
         
         let parameters: [String: Any] = [
@@ -54,7 +55,7 @@ enum AuthAPIClient {
             .eraseToAnyPublisher()
     }
     
-    static func forgotPublisher(email: String) -> AnyPublisher<Void, Error> {
+    public static func forgotPublisher(email: String) -> AnyPublisher<Void, Error> {
         var request = URLRequest.request(for: .resetPassword, httpMethod: .post)
         
         let parameters: [String: Any] = [URLParameter.email.rawValue: email.lowercased()]

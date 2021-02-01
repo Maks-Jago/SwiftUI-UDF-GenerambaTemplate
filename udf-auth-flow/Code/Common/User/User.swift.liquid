@@ -28,7 +28,7 @@ extension User: Faking {
     }
 }
 
-extension UserStorable {
+extension API.UserStorable {
     var asUser: User {
         .init(token: token, id: id, name: name, email: email, avatar: avatar)
     }
