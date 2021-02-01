@@ -1,0 +1,52 @@
+{% include 'header' %}
+
+import SwiftUI
+import SwiftUI_UDF
+import SwiftUI_Kit
+
+struct SignInContainer: Container {
+    typealias ContainerComponent = SignInComponent<ForgotPasswordContainer, SignUpContainer>
+    
+    @Environment(\.presentationMode) var presentationMode
+ 
+    func map(state: AppState, store: AppEnvironmentStore) -> ContainerComponent.Props {
+        .init(
+            email: Binding(
+                get: { state.signInForm.email },
+                set: { store.dispatch(AnyAction.UpdateEmail(email: $0, id: SignInForm.id)) }
+            ),
+            password: Binding(
+                get: { state.signInForm.password },
+                set: store.bind(AnyAction.UpdateSignInPassword.init(password:))
+            ),
+            
+            isEnabled: state.signInForm.isEnabledSignIn,
+            isLoaderPresented: Binding(value: isLoading(state)),
+            signInAction: store.bind(AnyAction.SignIn()),
+            signInAppleAction: store.bind(AnyAction.SignIn()),
+            forgotPassword: ForgotPasswordContainer(),
+            signUp: SignUpContainer(),
+            error: .init(
+                get: { state.signInForm.error },
+                set: { store.dispatch(AnyAction.Error(error: $0, id: SignInForm.id)) }
+            )
+        )
+    }
+    
+    func isLoading(_ state: AppState) -> Bool {
+        if case .signIn = state.authFlow {
+            return true
+        }
+        
+        return false
+    }
+    
+    func onContainerAppear(store: EnvironmentStore<AppState>) {
+        store.dispatch(AnyAction.UpdateEmail(email: "", id: SignInForm.id))
+        store.dispatch(AnyAction.UpdateSignInPassword(password: ""))
+//        #if DEBUG
+//        store.dispatch(AnyAction.UpdateEmail(email: "asd@i.ua", id: SignInForm.id))
+//        store.dispatch(AnyAction.UpdateSignInPassword(password: "123123123"))
+//        #endif
+    }
+}

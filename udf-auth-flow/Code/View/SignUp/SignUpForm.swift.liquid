@@ -1,0 +1,45 @@
+{% include 'header' %}
+
+import Foundation
+import SwiftUI_UDF
+
+struct SignUpForm: Reducible {
+    var email: String = ""
+    var password: String = ""
+    var name: String = ""
+    var isSuccessPresented: Bool = false
+    var error: String? = nil
+    
+    var isEnabledSignUp: Bool {
+        EmailValidator().validate(email) && PasswordValidator().validate(password) && !BlankValidator().validate(name)
+    }
+
+    mutating func reduce(_ action: AnyAction) {
+        switch action.value {
+        case let action as AnyAction.UpdateEmail<Id> where action.id == Self.id:
+            email = action.email
+        case let action as AnyAction.UpdateSignUpPassword:
+            password = action.password
+        case let action as AnyAction.UpdateSignUpName:
+            name = action.name
+        case is AnyAction.UserSignedUp:
+            email = ""
+            password = ""
+            name = ""
+            isSuccessPresented.toggle()
+        case let action as AnyAction.Error where action.id == SignUpForm.id:
+            error = action.error
+        default:
+            break
+        }
+    }
+}
+
+// MARK: - Id
+extension SignUpForm {
+    struct Id: Hashable {
+        var value: String
+    }
+    
+    static var id: Id = Id(value: "SignUpForm")
+}

@@ -1,0 +1,73 @@
+{% include 'header' %}
+
+import SwiftUI
+import SwiftUI_UDF
+import SwiftUI_Kit
+
+struct SignUpComponent: Component {
+    struct Props {
+        var email: Binding<String>
+        var password: Binding<String>
+        var name: Binding<String>
+        var isEnabled: Bool
+        var isLoaderPresented: Binding<Bool>
+        var signUpAction: Command
+        var signUpAppleAction: Command
+        var loginAction: Command
+        var error: Binding<String?>
+        var isSuccessPresented: Binding<Bool>
+        var successAction: Command
+    }
+    
+    var props: Props
+    
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 22) {
+                TextField("Name", text: self.props.name)
+                TextField("Email", text: self.props.email)
+                TextField("Password", text: self.props.password)
+                
+                Button(action: self.props.signUpAction) {
+                    Text("SignUp")
+                }
+                .disabled(!self.props.isEnabled)
+                .errorAlert(error: self.props.error)
+                
+                Text("")
+                    .alert(isPresented: self.props.isSuccessPresented) {
+                        Alert(
+                            title: Text("Success"),
+                            message: Text("Check email"),
+                            dismissButton: Alert.Button.default(Text("Ok"), action: self.props.successAction)
+                        )
+                    }
+                
+                Button(action: self.props.loginAction) {
+                    Text("Login")
+                }
+            }
+        }
+        .loaderSheet(isPresented: self.props.isLoaderPresented)
+        .hideKeyboardByTap()
+    }
+}
+
+struct SignUpComponent_Previews: PreviewProvider {
+    static var previews: some View {
+        SignUpComponent(props:
+            .init(email: .constant(""),
+                  password: .constant(""),
+                  name: .constant(""),
+                  isEnabled: false,
+                  isLoaderPresented: .constant(false),
+                  signUpAction: {},
+                  signUpAppleAction: {},
+                  loginAction: {},
+                  error: .constant(nil),
+                  isSuccessPresented: .constant(false),
+                  successAction: {}
+            )
+        )
+    }
+}

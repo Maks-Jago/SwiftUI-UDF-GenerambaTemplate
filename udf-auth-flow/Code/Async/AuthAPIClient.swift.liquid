@@ -1,0 +1,71 @@
+{% include 'header' %}
+
+import Foundation
+import Combine
+
+enum AuthAPIClient {
+    static func signUpPublisher(name: String, email: String, password: String) -> AnyPublisher<Void, Error> {
+        var request = URLRequest.request(for: .registration, httpMethod: .post)
+        
+        let parameters: [String: Any] = [URLParameter.name.rawValue: name,
+                                         URLParameter.email.rawValue: email.lowercased(),
+                                         URLParameter.password.rawValue: password,
+                                         ]
+        
+        request.httpBody = encode(parameters, for: .post)
+        return URLSession.shared
+            .dataTaskPublisher(for: request)
+            .tryMap { try validate($0.data, $0.response) }
+            .eraseToAnyPublisher()
+    }
+    
+    static func signInPublisher(email: String, password: String) -> AnyPublisher<UserStorable, Error> {
+        var request = URLRequest.request(for: .session, httpMethod: .post)
+        
+        let parameters: [String: Any] = [
+                                         URLParameter.email.rawValue: email.lowercased(),
+                                         URLParameter.password.rawValue: password,
+                                         ]
+        
+        request.httpBody = encode(parameters, for: .post)
+        return URLSession.shared
+            .dataTaskPublisher(for: request)
+            .map { tuple -> (data: Data, response: URLResponse) in
+                guard let response = tuple.response as? HTTPURLResponse else {
+                    return tuple
+                }
+                
+                guard let json = try? JSONSerialization.jsonObject(with: tuple.data, options: []) as? [String: Any], var user = json["user"] as? [String: Any] else {
+                    return (tuple.data, tuple.response)
+                }
+                
+                let accessToken = (response.allHeaderFields[HTTPHeaderField.authorization.rawValue] as? String) ?? ""
+                
+                user[UserStorable.CodingKeys.token.rawValue] = accessToken
+                    
+                
+                let data = try? JSONSerialization.data(withJSONObject: user, options: [])
+                
+                return (data ?? tuple.data, tuple.response)
+            }
+            .tryMap { try validate($0.data, $0.response) }
+            .decode(type: UserStorable.self, decoder: JSONDecoder())
+            .eraseToAnyPublisher()
+    }
+    
+    static func forgotPublisher(email: String) -> AnyPublisher<Void, Error> {
+        var request = URLRequest.request(for: .resetPassword, httpMethod: .post)
+        
+        let parameters: [String: Any] = [URLParameter.email.rawValue: email.lowercased()]
+        
+        request.httpBody = encode(parameters, for: .post)
+        return URLSession.shared
+            .dataTaskPublisher(for: request)
+            .tryMap {
+                print($0.data)
+                try validate($0.data, $0.response)
+                
+            }
+            .eraseToAnyPublisher()
+    }
+}

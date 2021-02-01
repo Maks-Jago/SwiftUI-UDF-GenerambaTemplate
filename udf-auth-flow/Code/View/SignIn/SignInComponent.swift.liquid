@@ -1,0 +1,77 @@
+{% include 'header' %}
+
+import SwiftUI
+import SwiftUI_UDF
+
+struct SignInComponent<ForgotPassword: Container, SignUp: Container>: Component {
+    struct Props {
+        var email: Binding<String>
+        var password: Binding<String>
+        var isEnabled: Bool
+        var isLoaderPresented: Binding<Bool>
+        var signInAction: Command
+        var signInAppleAction: Command
+        var forgotPassword: ForgotPassword
+        var signUp: SignUp
+        var error: Binding<String?>
+    }
+    
+    init(props: Props) {
+        self.props = props
+    }
+    
+    var props: Props
+    
+    @State private var isForgotPresented: Bool = false
+    @State private var isSignUpPresented: Bool = false
+
+    var body: some View {
+        NavigationView {
+            VStack {
+                
+                Text("").errorAlert(error: props.error)
+                
+                TextField("email", text: self.props.email)
+                TextField("password", text: self.props.password)
+                
+                Button(action: self.props.signInAction) {
+                    Text("Sign In")
+                }
+                .disabled(!self.props.isEnabled)
+                
+                Button(action: $isForgotPresented.toggleAction()) {
+                    Text("Forgot Password")
+                }
+                .sheetContainer(isPresented: $isForgotPresented, container: props.forgotPassword)
+                .padding(.vertical, 22)
+                
+                
+                Button(action: self.$isSignUpPresented.toggleAction()) {
+                    Text("Sign Up")
+                }
+                .sheetContainer(isPresented: $isSignUpPresented, container: props.signUp)
+                
+            }
+            .loaderSheet(isPresented: props.isLoaderPresented)
+            .hideKeyboardByTap()
+        }
+    }
+}
+
+struct SignInComponent_Previews: PreviewProvider {
+    static var previews: some View {
+        SignInComponent(props:
+            .init(email: .constant(""),
+                  password: .constant(""),
+                  isEnabled: true,
+                  isLoaderPresented: .constant(false),
+                  signInAction: {},
+                  signInAppleAction: {},
+                  forgotPassword: RenderContainer(viewToRender: ForgotPasswordComponent_Previews.previews),
+                  signUp: RenderContainer(viewToRender: SignUpComponent_Previews.previews),
+                  error: .constant(nil)
+            )
+        )
+    }
+}
+

@@ -1,0 +1,30 @@
+{% include 'header' %}
+
+import Foundation
+
+struct User: Codable {
+    var token: String?
+    var id: Int
+    var name: String
+    var email: String
+    var avatar: String
+}
+
+// MARK: - Equatable
+extension User: Equatable {
+    static func == (lhs: User, rhs: User) -> Bool {
+        lhs.id == rhs.id
+    }
+}
+
+// MARK: - Faking
+extension User: Faking {
+    init() {
+        token = nil
+        id = 1223456
+        name = "Вася"
+        email = "emailexample@gmail.com"
+        avatar = "https://delo.ua/files/news/images/3602/61/picture2_zelenskij-zarabot_360261_p0.jpg"
+    }
+}
+

@@ -1,0 +1,40 @@
+{% include 'header' %}
+
+import Foundation
+struct UserStorable: Codable {
+    var token: String
+    var id: Int
+    var name: String
+    var email: String
+    var avatar: String
+}
+
+// MARK: - CodingKey
+extension UserStorable {
+    
+     enum CodingKeys: String, CodingKey {
+        case token, id, name, email, avatar
+    }
+}
+
+// MARK: - Decoding
+extension UserStorable {
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        token = container.decodeSafely(.token) ?? ""
+        id = container.decodeSafely(.id) ?? 0
+        name = container.decodeSafely(.name) ?? ""
+        email = container.decodeSafely(.email) ?? ""
+        avatar = container.decodeSafely(.avatar) ?? ""
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(token, forKey: .token)
+        try container.encode(id, forKey: .id)
+        try container.encode(name, forKey: .name)
+        try container.encode(email, forKey: .email)
+        try container.encode(avatar, forKey: .avatar)
+    }
+}

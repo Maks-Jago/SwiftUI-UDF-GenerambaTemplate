@@ -1,0 +1,26 @@
+# Template information section
+name: "udf-auth-flow"
+summary: "SwiftUI-UDF Auth flow template. Used in 'You are launched'"
+author: "Max Kuznetsov"
+version: "1.0.0"
+license: "MIT"
+
+# The declarations for code files
+
+code_files:
+
+# Async layer
+- {name: Async/AuthMiddleware.swift, path: Code/Async/AuthMiddleware.swift.liquid.swift.liquid}
+- {name: Async/AuthAPIClient.swift, path: Code/Async/AuthAPIClient.swift.liquid}
+
+# Common layer
+- {name: Common/User/View/Container.swift, path: Code/View/container.swift.liquid}
+- {name: View/Component.swift, path: Code/View/component.swift.liquid}
+
+# State layer
+- {name: State/User/User.swift, path: Code/State/User/User.swift.liquid}
+- {name: State/User/UserForm.swift, path: Code/State/User/UserForm.swift.liquid}
+- {name: State/Flow.swift, path: Code/State/flow.swift.liquid}
+
+# View layer
+- {name: Middleware.swift, path: Code/Async/middleware.swift.liquid}
