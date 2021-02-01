@@ -1,0 +1,16 @@
+{% include 'header' %}
+
+import Foundation
+
+struct EmailValidator: BlankValidation, Validation {
+    func validate(_ value: String) -> Bool {
+        guard !blankValidation(string: value) else {
+            return false
+        }
+
+        let emailRegex = "^[+\\w\\.\\-']+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*(\\.[a-zA-Z]{2,})+$"
+        let predicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
+
+        return predicate.evaluate(with: value)
+    }
+}

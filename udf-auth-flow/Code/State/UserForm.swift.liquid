@@ -1,0 +1,40 @@
+{% include 'header' %}
+
+import Foundation
+import SwiftUI_UDF
+
+struct UserForm: Reducible {
+
+    @SafetyValue(key: StorageKey.user.rawValue, defaultValue: .init(), storage: KeychainStorage())
+    var user: User
+    
+    var token: String {
+        user.token ?? ""
+    }
+    
+    var isLoggedIn: Bool {
+        user.token?.isEmpty == false
+    }
+    
+    mutating func reduce(_ action: AnyAction) {
+        switch action.value {
+        case let action as Actions.UpdateUser:
+            updateUser(action.user)
+            
+        case let action as Actions.SetUserSignedIn:
+            updateUser(action.user)
+            
+        case is Actions.Logout:
+            self.user = .init()
+            
+        default:
+            break
+        }
+    }
+    
+    mutating func updateUser(_ user: User) {
+        var newUser = user
+        newUser.token = newUser.token?.isEmpty == true ? self.user.token : newUser.token
+        self.user = newUser
+    }
+}

@@ -1,0 +1,40 @@
+{% include 'header' %}
+
+import Foundation
+import SwiftUI_UDF
+
+struct SignUpForm: Reducible {
+    var email: String = ""
+    var password: String = ""
+    var name: String = ""
+    var isSuccessPresented: Bool = false
+    var error: String? = nil
+    
+    var isEnabledSignUp: Bool {
+        EmailValidator().validate(email) && PasswordValidator().validate(password) && !BlankValidator().validate(name)
+    }
+
+    mutating func reduce(_ action: AnyAction) {
+        switch action.value {
+        case let action as Actions.UpdateField where action.id == Field.email:
+            email = action.value
+        case let action as Actions.UpdateField where action.id == Field.password:
+            password = action.value
+        case let action as Actions.UpdateField where action.id == Field.name:
+            name = action.value
+        case is Actions.UserSignedUp:
+            email = ""
+            password = ""
+            name = ""
+            isSuccessPresented = true
+        case let action as Actions.Error where action.id == AuthFlow.signUpId:
+            error = action.error
+        default:
+            break
+        }
+    }
+    
+    enum Field: String, Hashable {
+        case email, password, name
+    }
+}

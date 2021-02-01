@@ -1,0 +1,46 @@
+{% include 'header' %}
+
+import SwiftUI
+import SwiftUI_UDF
+import SwiftUI_Kit
+
+struct SignInContainer: Container {
+    typealias ContainerComponent = SignInComponent<ForgotPasswordContainer, SignUpContainer>
+    
+    @Environment(\.presentationMode) var presentationMode
+ 
+    func map(state: AppState, store: EnvironmentStore<AppState>) -> ContainerComponent.Props {
+        .init(
+            email: Binding(
+                get: { state.signInForm.email },
+                set: { store.dispatch(Actions.UpdateField(id: SignInForm.Field.email, value: $0)) }
+            ),
+            password: Binding(
+                get: { state.signInForm.password },
+                set: { store.dispatch(Actions.UpdateField(id: SignInForm.Field.password, value: $0)) }
+            ),
+            
+            isEnabled: state.signInForm.isEnabledSignIn,
+            isLoaderPresented: Binding(value: state.authFlow == .signIn ),
+            signInAction: store.bind(Actions.SignIn()),
+            signInAppleAction: store.bind(Actions.SignIn()),
+            forgotPassword: ForgotPasswordContainer(),
+            signUp: SignUpContainer(),
+            error: .init(
+                get: { state.signInForm.error },
+                set: { store.dispatch(Actions.Error(error: $0, id: AuthFlow.signInId)) }
+            )
+        )
+    }
+    
+    func onContainerAppear(store: EnvironmentStore<AppState>) {
+        store.dispatch(Actions.UpdateField(id: SignInForm.Field.email, value: ""))
+        store.dispatch(Actions.UpdateField(id: SignInForm.Field.password, value: ""))
+//        #if DEBUG
+//        store.dispatch(Actions.UpdateField(id: SignInForm.Field.email, value: "asd@i.ua"))
+//        store.dispatch(Actions.UpdateField(id: SignInForm.Field.password, value: "123123123"))
+//        store.dispatch(Actions.UpdateEmail(email: "asd@i.ua", id: SignInForm.id))
+//        store.dispatch(Actions.UpdateSignInPassword(password: "123123123"))
+//        #endif
+    }
+}

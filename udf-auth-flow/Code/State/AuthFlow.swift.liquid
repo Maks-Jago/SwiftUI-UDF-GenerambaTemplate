@@ -1,0 +1,39 @@
+{% include 'header' %}
+
+import Foundation
+import SwiftUI_UDF
+
+enum AuthFlow: IdentifiableFlow {
+    case none, signIn, signUp, forgotPassword
+    
+    init() { self = .none }
+    
+    static var signInId: FlowId = .init(value: "SignIn")
+    static var signUpId: FlowId = .init(value: "SignUp")
+    static var forgotPasswordId: FlowId = .init(value: "ForgotPassword")
+    
+    mutating func reduce(_ action: AnyAction) {
+        switch action.value {
+        
+        case is Actions.SendForgotPassword:
+            self = .forgotPassword
+        case is Actions.UpdateForgotPasswordIsFinished:
+            self = .none
+        case is Actions.SetUserSignedIn:
+            self = .none
+        case is Actions.SignIn:
+            self = .signIn
+        case is Actions.SignUp:
+            self = .signUp
+        case is Actions.UserSignedUp:
+            self = .none
+            
+        case let action as Actions.Error where action.id == Self.forgotPasswordId: self = .none
+        case let action as Actions.Error where action.id == Self.signUpId: self = .none
+        case let action as Actions.Error where action.id == Self.signInId: self = .none
+            
+        default:
+            break
+        }
+    }
+}

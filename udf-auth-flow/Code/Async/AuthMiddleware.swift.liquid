@@ -1,0 +1,82 @@
+{% include 'header' %}
+
+import Combine
+import SwiftUI_UDF
+import SwiftUI
+import API
+
+final class AuthMiddleware: SyncMiddleware<AppState> {
+    
+    override func observe(state: AppState) {
+        switch state.authFlow {
+        case .forgotPassword:
+            execute(ForgotPasswordEffect(email: state.forgotPasswordForm.email, errorId: AuthFlow.forgotPasswordId))
+            
+        case .signIn:
+            execute(SignInEffect(email: state.signInForm.email, password: state.signInForm.password, errorId: AuthFlow.signInId))
+            
+        case .signUp:
+            execute(SignUpEffect(name: state.signUpForm.name, email: state.signUpForm.email, password: state.signUpForm.password, errorId: AuthFlow.signUpId))
+            
+        default:
+            break
+        }
+    }
+}
+
+struct ForgotPasswordEffect<ErrorId: Hashable>: Effectable {
+    let email: String
+    let errorId: ErrorId
+    
+    init(email: String, errorId: ErrorId) {
+        self.email = email
+        self.errorId = errorId
+    }
+    
+    var upstream: AnyPublisher<AnyAction, Never> {
+        AuthAPIClient.forgotPublisher(email: email)
+            .map { Actions.UpdateForgotPasswordIsFinished(finished: true).eraseToAnyAction() }
+            .catch { Just(Actions.Error(error: $0.localizedDescription, id: self.errorId).eraseToAnyAction()) }
+            .eraseToAnyPublisher()
+    }
+}
+
+struct SignInEffect<ErrorId: Hashable>: Effectable {
+    let email: String
+    let password: String
+    let errorId: ErrorId
+    
+    init(email: String, password: String, errorId: ErrorId) {
+        self.email = email
+        self.password = password
+        self.errorId = errorId
+    }
+    
+    var upstream: AnyPublisher<AnyAction, Never> {
+        AuthAPIClient.signInPublisher(email: email, password: password)
+            .map { Actions.SetUserSignedIn(user: $0.asUser).eraseToAnyAction() }
+            .catch { Just(Actions.Error(error: $0.localizedDescription, id: self.errorId).eraseToAnyAction()) }
+            .eraseToAnyPublisher()
+    }
+}
+
+struct SignUpEffect<ErrorId: Hashable>: Effectable {
+    let email: String
+    let name: String
+    let password: String
+    let errorId: ErrorId
+    
+    init(name: String, email: String, password: String, errorId: ErrorId) {
+        self.name = name
+        self.email = email
+        self.password = password
+        self.errorId = errorId
+    }
+    
+    var upstream: AnyPublisher<AnyAction, Never> {
+        AuthAPIClient.signUpPublisher(name: self.name, email: self.email, password: password)
+            .map { Actions.UserSignedUp().eraseToAnyAction() }
+            .catch { Just(Actions.Error(error: $0.localizedDescription, id: self.errorId).eraseToAnyAction()) }
+            .eraseToAnyPublisher()
+    }
+}

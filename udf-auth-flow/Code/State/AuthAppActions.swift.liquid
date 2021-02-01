@@ -1,0 +1,31 @@
+{% include 'header' %}
+
+import SwiftUI_UDF
+import SwiftUI
+
+extension Actions {
+    
+    struct UpdateForgotPasswordIsFinished: Actionable, Equatable {
+        let finished: Bool
+    }
+    
+    struct SendForgotPassword: Actionable, Equatable {}
+    
+    struct SetUserSignedIn: Actionable, Equatable {
+        let user: User
+    }
+    
+    struct SignIn: Actionable, Equatable {}
+    
+    struct UpdateUser: Actionable, Equatable {
+        let user: User
+    }
+
+    struct SignUp: Actionable, Equatable {}
+    
+    struct UserSignedUp: Actionable, Equatable {}
+    
+    struct LoadUser: Actionable, Equatable {}
+    
+    struct Logout: Actionable, Equatable {}
+}

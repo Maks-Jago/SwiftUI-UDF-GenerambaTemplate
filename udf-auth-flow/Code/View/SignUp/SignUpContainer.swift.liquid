@@ -1,0 +1,42 @@
+{% include 'header' %}
+
+import SwiftUI
+import SwiftUI_UDF
+import SwiftUI_Kit
+
+struct SignUpContainer: Container {
+    typealias ContainerComponent = SignUpComponent
+    
+    @Environment(\.presentationMode) var presentationMode
+
+    func map(state: AppState, store: EnvironmentStore<AppState>) -> ContainerComponent.Props {
+        .init(
+            email: Binding(
+                get: { state.signUpForm.email },
+                set: { store.dispatch(Actions.UpdateField(id: SignUpForm.Field.email, value: $0)) }
+            ),
+            password: Binding(
+                get: { state.signUpForm.password },
+                set: { store.dispatch(Actions.UpdateField(id: SignUpForm.Field.password, value: $0)) }
+            ),
+            name: Binding(
+                get: { state.signUpForm.name },
+                set: { store.dispatch(Actions.UpdateField(id: SignUpForm.Field.name, value: $0)) }
+            ),
+            isEnabled: state.signUpForm.isEnabledSignUp,
+            isLoaderPresented: Binding(value: state.authFlow == .signUp ),
+            signUpAction: store.bind(Actions.SignUp()),
+            signUpAppleAction: {},
+            loginAction: presentationMode.dismissAction(),
+            error: Binding(
+                get: { state.signUpForm.error },
+                set: { store.dispatch(Actions.Error(error: $0, id: AuthFlow.signUpId)) }
+            ),
+            isSuccessPresented: Binding(
+                get: { state.signUpForm.isSuccessPresented },
+                set: { _ in store.dispatch(Actions.UserSignedUp()) }
+            ),
+            successAction: presentationMode.dismissAction()
+        )
+    }
+}

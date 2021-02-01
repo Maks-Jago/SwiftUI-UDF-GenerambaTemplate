@@ -1,0 +1,22 @@
+{% include 'header' %}
+
+import Foundation
+import SwiftUI_UDF
+
+struct AppState: Reducible {
+
+    var userForm = UserForm()
+    var signInForm = SignInForm()
+    var signUpForm = SignUpForm()
+    var forgotPasswordForm = ForgotPasswordForm()
+    var authFlow = AuthFlow()
+
+    mutating func reduce(_ action: AnyAction) {
+        
+        authFlow.reduce(action)
+        forgotPasswordForm.reduce(action)
+        userForm.reduce(action)
+        signInForm.reduce(action)
+        signUpForm.reduce(action)
+    }
+}

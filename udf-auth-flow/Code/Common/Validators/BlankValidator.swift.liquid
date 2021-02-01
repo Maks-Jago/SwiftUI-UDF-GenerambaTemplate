@@ -1,0 +1,10 @@
+{% include 'header' %}
+
+import Foundation
+
+struct BlankValidator: BlankValidation, Validation {
+    
+    func validate(_ value: String) -> Bool {
+        return blankValidation(string: value)
+    }
+}

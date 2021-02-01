@@ -1,0 +1,43 @@
+{% include 'header' %}
+
+import Foundation
+import SwiftUI_UDF
+
+struct SignInForm: Reducible {
+    var email: String = ""
+    var password: String = ""
+
+    var isEnabledSignIn: Bool {
+        EmailValidator().validate(email) && PasswordValidator().validate(password)
+    }
+    
+    var error: String? = nil
+
+    mutating func reduce(_ action: AnyAction) {
+        switch action.value {
+        case let action as Actions.UpdateField where action.id == Field.email:
+            email = action.value
+
+        case let action as Actions.UpdateField where action.id == Field.password:
+            password = action.value
+            
+        case let action as Actions.Error where action.id == AuthFlow.signInId:
+            error = action.error
+            
+        case is Actions.SetUserSignedIn:
+            email = ""
+            password = ""
+            
+        default:
+            break
+        }
+    }
+}
+
+// MARK: - Fields
+extension SignInForm {
+
+    enum Field: String, Hashable {
+        case email, password
+    }
+}

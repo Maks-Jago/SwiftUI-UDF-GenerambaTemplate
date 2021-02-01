@@ -1,0 +1,14 @@
+{% include 'header' %}
+
+import Foundation
+
+protocol BlankValidation {
+    func blankValidation(string: String?) -> Bool
+}
+
+extension BlankValidation {
+
+    func blankValidation(string: String?) -> Bool {
+        string?.isEmpty ?? true
+    }
+}
