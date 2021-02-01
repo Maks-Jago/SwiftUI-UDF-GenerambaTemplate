@@ -34,16 +34,10 @@ struct SignInForm: Reducible {
     }
 }
 
-// MARK: - Id
+// MARK: - Fields
 extension SignInForm {
 
     enum Field: String, Hashable {
         case email, password
     }
-
-    struct Id: Hashable {
-        var value: String
-    }
-    
-    static var id: Id = Id(value: "SignInForm")
 }

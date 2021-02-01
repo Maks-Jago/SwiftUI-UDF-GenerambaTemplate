@@ -4,25 +4,6 @@ import SwiftUI_UDF
 import SwiftUI
 
 extension Actions {
-    struct UpdateSignInPassword: Actionable, Equatable {
-        let password: String
-    }
-    
-    struct UpdateSignUpEmail: Actionable, Equatable {
-        let email: String
-    }
-    
-    struct UpdateSignUpPassword: Actionable, Equatable {
-        let password: String
-    }
-    
-    struct UpdateForgotPasswordEmail: Actionable, Equatable {
-        let email: String
-    }
-    
-    struct UpdateSignUpName: Actionable, Equatable {
-        let name: String
-    }
     
     struct UpdateForgotPasswordIsFinished: Actionable, Equatable {
         let finished: Bool
@@ -35,11 +16,6 @@ extension Actions {
     }
     
     struct SignIn: Actionable, Equatable {}
-        
-    struct UpdateEmail<Id: Hashable>: Actionable, Equatable {
-        let id: Id
-        let email: String
-    }
     
     struct UpdateUser: Actionable, Equatable {
         let user: User
