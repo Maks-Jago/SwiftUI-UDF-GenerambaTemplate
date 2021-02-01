@@ -8,19 +8,32 @@ license: "MIT"
 # The declarations for code files
 
 code_files:
-
 # Async layer
-- {name: Async/AuthMiddleware.swift, path: Code/Async/AuthMiddleware.swift.liquid.swift.liquid}
-- {name: Async/AuthAPIClient.swift, path: Code/Async/AuthAPIClient.swift.liquid}
+- {name: AuthMiddleware.swift, path: Code/Async/AuthMiddleware.swift.liquid}
+- {name: AuthAPIClient.swift, path: Code/Async/AuthAPIClient.swift.liquid}
 
 # Common layer
-- {name: Common/User/View/Container.swift, path: Code/View/container.swift.liquid}
-- {name: View/Component.swift, path: Code/View/component.swift.liquid}
+- {name: User.swift, path: Code/Common/User/User.swift.liquid}
+- {name: UserStorable.swift, path: Code/Common/User/UserStorable.swift.liquid}
+- {name: BlankValidation.swift, path: Code/Common/Validators/BlankValidation.swift.liquid}
+- {name: BlankValidator.swift, path: Code/Common/Validators/BlankValidator.swift.liquid}
+- {name: ConfirmPasswordValidator.swift, path: Code/Common/Validators/ConfirmPasswordValidator.swift.liquid}
+- {name: EmailValidator.swift, path: Code/Common/Validators/EmailValidator.swift.liquid}
+- {name: PasswordValidator.swift, path: Code/Common/Validators/PasswordValidator.swift.liquid}
+- {name: Validation.swift, path: Code/Common/Validators/Validation.swift.liquid}
 
 # State layer
-- {name: State/User/User.swift, path: Code/State/User/User.swift.liquid}
-- {name: State/User/UserForm.swift, path: Code/State/User/UserForm.swift.liquid}
-- {name: State/Flow.swift, path: Code/State/flow.swift.liquid}
+- {name: AddToAppState.swift, path: Code/State/AddToAppState.swift.liquid}
+- {name: AuthAppActions.swift, path: Code/State/AuthAppActions.swift.liquid}
+- {name: AuthFlow.swift, path: Code/State/AuthFlow.swift.liquid}
+- {name: UserForm.swift, path: Code/State/UserForm.swift.liquid}
 
 # View layer
-- {name: Middleware.swift, path: Code/Async/middleware.swift.liquid}
+- {name: ForgotPasswordComponent.swift, path: Code/View/ForgotPassword/ForgotPasswordComponent.swift.liquid}
+- {name: ForgotPasswordContainer.swift, path: Code/View/ForgotPassword/ForgotPasswordContainer.swift.liquid}
+- {name: ForgotPasswordForm.swift, path: Code/View/ForgotPassword/ForgotPasswordForm.swift.liquid}
+- {name: SignInComponent.swift, path: Code/View/SignIn/SignInContainer.swift.liquid}
+- {name: SignInForm.swift, path: Code/View/SignIn/SignInForm.swift.liquid}
+- {name: SignUpComponent.swift, path: Code/View/SignUp/SignUpComponent.swift.liquid}
+- {name: SignUpContainer.swift, path: Code/View/SignUp/SignUpContainer.swift.liquid}
+- {name: SignUpForm.swift, path: Code/View/SignUp/SignUpForm.swift.liquid}
