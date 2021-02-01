@@ -15,13 +15,13 @@ struct UserForm: Reducible {
     
     mutating func reduce(_ action: AnyAction) {
         switch action.value {
-        case let action as AnyAction.UpdateUser:
+        case let action as Actions.UpdateUser:
             updateUser(action.user)
             
-        case let action as AnyAction.SetUserSignedIn:
+        case let action as Actions.SetUserSignedIn:
             updateUser(action.user)
             
-        case is AnyAction.Logout:
+        case is Actions.Logout:
             self.user = .init()
             
         default:
