@@ -34,8 +34,8 @@ struct ForgotPasswordEffect<ErrorId: Hashable>: Effectable {
     
     var upstream: AnyPublisher<AnyAction, Never> {
         AuthAPIClient.forgotPublisher(email: email)
-            .map { AnyAction.UpdateForgotPasswordIsFinished(finished: true).eraseToAnyAction() }
-            .catch { Just(AnyAction.Error(error: $0.localizedDescription, id: self.errorId).eraseToAnyAction()) }
+            .map { Actions.UpdateForgotPasswordIsFinished(finished: true).eraseToAnyAction() }
+            .catch { Just(Actions.Error(error: $0.localizedDescription, id: self.errorId).eraseToAnyAction()) }
             .eraseToAnyPublisher()
     }
 }
@@ -53,8 +53,8 @@ struct SignInEffect<ErrorId: Hashable>: Effectable {
     
     var upstream: AnyPublisher<AnyAction, Never> {
         AuthAPIClient.signInPublisher(email: email, password: password)
-            .map { AnyAction.SetUserSignedIn(user: $0.asUser).eraseToAnyAction() }
-            .catch { Just(AnyAction.Error(error: $0.localizedDescription, id: self.errorId).eraseToAnyAction()) }
+            .map { Actions.SetUserSignedIn(user: $0.asUser).eraseToAnyAction() }
+            .catch { Just(Actions.Error(error: $0.localizedDescription, id: self.errorId).eraseToAnyAction()) }
             .eraseToAnyPublisher()
     }
 }
@@ -74,8 +74,8 @@ struct SignUpEffect<ErrorId: Hashable>: Effectable {
     
     var upstream: AnyPublisher<AnyAction, Never> {
         AuthAPIClient.signUpPublisher(name: self.name, email: self.email, password: password)
-            .map { AnyAction.UserSignedUp().eraseToAnyAction() }
-            .catch { Just(AnyAction.Error(error: $0.localizedDescription, id: self.errorId).eraseToAnyAction()) }
+            .map { Actions.UserSignedUp().eraseToAnyAction() }
+            .catch { Just(Actions.Error(error: $0.localizedDescription, id: self.errorId).eraseToAnyAction()) }
             .eraseToAnyPublisher()
     }
 }

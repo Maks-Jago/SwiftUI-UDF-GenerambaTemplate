@@ -9,7 +9,7 @@ struct SignInContainer: Container {
     
     @Environment(\.presentationMode) var presentationMode
  
-    func map(state: AppState, store: AppEnvironmentStore) -> ContainerComponent.Props {
+    func map(state: AppState, store: EnvironmentStore<AppState>) -> ContainerComponent.Props {
         .init(
             email: Binding(
                 get: { state.signInForm.email },

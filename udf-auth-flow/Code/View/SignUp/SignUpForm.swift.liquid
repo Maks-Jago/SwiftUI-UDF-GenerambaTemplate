@@ -27,7 +27,7 @@ struct SignUpForm: Reducible {
             password = ""
             name = ""
             isSuccessPresented.toggle()
-        case let action as Actions.Error where action.id == AuthFlow.signUpId.id:
+        case let action as Actions.Error where action.id == AuthFlow.signUpId:
             error = action.error
         default:
             break
