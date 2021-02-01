@@ -7,7 +7,8 @@ enum AuthAPIClient {
     static func signUpPublisher(name: String, email: String, password: String) -> AnyPublisher<Void, Error> {
         var request = URLRequest.request(for: .registration, httpMethod: .post)
         
-        let parameters: [String: Any] = [URLParameter.name.rawValue: name,
+        let parameters: [String: Any] = [
+            URLParameter.name.rawValue: name,
                                          URLParameter.email.rawValue: email.lowercased(),
                                          URLParameter.password.rawValue: password,
                                          ]
