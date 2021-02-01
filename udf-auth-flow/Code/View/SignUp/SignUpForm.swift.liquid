@@ -22,12 +22,12 @@ struct SignUpForm: Reducible {
             password = action.value
         case let action as Actions.UpdateField where action.id == Field.name:
             name = action.value
-        case is AnyAction.UserSignedUp:
+        case is Actions.UserSignedUp:
             email = ""
             password = ""
             name = ""
             isSuccessPresented.toggle()
-        case let action as AnyAction.Error where action.id == SignUpForm.id:
+        case let action as Actions.Error where action.id == AuthFlow.signUpId.id:
             error = action.error
         default:
             break
@@ -37,13 +37,4 @@ struct SignUpForm: Reducible {
     enum Field: String, Hashable {
         case email, password, name
     }
-}
-
-// MARK: - Id
-extension SignUpForm {
-    struct Id: Hashable {
-        var value: String
-    }
-    
-    static var id: Id = Id(value: "SignUpForm")
 }

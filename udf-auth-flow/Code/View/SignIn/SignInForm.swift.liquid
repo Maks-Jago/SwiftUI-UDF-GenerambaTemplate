@@ -21,7 +21,7 @@ struct SignInForm: Reducible {
         case let action as Actions.UpdateField where action.id == Field.password:
             password = action.value
             
-        case let action as Actions.Error where action.id == SignInForm.id:
+        case let action as Actions.Error where action.id == AuthFlow.signInId.id:
             error = action.error
             
         case is Actions.SetUserSignedIn:
