@@ -21,24 +21,16 @@ struct SignInContainer: Container {
             ),
             
             isEnabled: state.signInForm.isEnabledSignIn,
-            isLoaderPresented: Binding(value: isLoading(state)),
+            isLoaderPresented: Binding(value: state.authFlow == .signIn ),
             signInAction: store.bind(Actions.SignIn()),
             signInAppleAction: store.bind(Actions.SignIn()),
             forgotPassword: ForgotPasswordContainer(),
             signUp: SignUpContainer(),
             error: .init(
                 get: { state.signInForm.error },
-                set: { store.dispatch(Actions.Error(error: $0, id: SignInForm.id)) }
+                set: { store.dispatch(Actions.Error(error: $0, id: AuthFlow.signInId)) }
             )
         )
-    }
-    
-    func isLoading(_ state: AppState) -> Bool {
-        if case .signIn = state.authFlow {
-            return true
-        }
-        
-        return false
     }
     
     func onContainerAppear(store: EnvironmentStore<AppState>) {

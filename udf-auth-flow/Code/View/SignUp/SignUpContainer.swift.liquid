@@ -24,13 +24,13 @@ struct SignUpContainer: Container {
                 set: { store.dispatch(Actions.UpdateField(id: SignUpForm.Field.name, value: $0)) }
             ),
             isEnabled: state.signUpForm.isEnabledSignUp,
-            isLoaderPresented: Binding(value: isLoading(state)),
+            isLoaderPresented: Binding(value: state.authFlow == .signUp ),
             signUpAction: store.bind(Actions.SignUp()),
             signUpAppleAction: {},
             loginAction: presentationMode.dismissAction(),
             error: Binding(
                 get: { state.signUpForm.error },
-                set: { store.dispatch(Actions.Error(error: $0, id: SignUpForm.id)) }
+                set: { store.dispatch(Actions.Error(error: $0, id: AuthFlow.signUpId)) }
             ),
             isSuccessPresented: Binding(
                 get: { state.signUpForm.isSuccessPresented },
@@ -38,13 +38,5 @@ struct SignUpContainer: Container {
             ),
             successAction: presentationMode.dismissAction()
         )
-    }
-    
-    func isLoading(_ state: AppState) -> Bool {
-        if case .signUp = state.authFlow {
-            return true
-        }
-        
-        return false
     }
 }
