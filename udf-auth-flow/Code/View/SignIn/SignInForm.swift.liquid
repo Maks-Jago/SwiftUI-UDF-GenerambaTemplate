@@ -15,16 +15,16 @@ struct SignInForm: Reducible {
 
     mutating func reduce(_ action: AnyAction) {
         switch action.value {
-        case let action as AnyAction.UpdateSignInPassword:
-            password = action.password
+        case let action as Actions.UpdateField where action.id == Field.email:
+            email = action.value
+
+        case let action as Actions.UpdateField where action.id == Field.password:
+            password = action.value
             
-        case let action as AnyAction.UpdateEmail<Id> where action.id == Self.id:
-            email = action.email
-            
-        case let action as AnyAction.Error where action.id == SignInForm.id:
+        case let action as Actions.Error where action.id == SignInForm.id:
             error = action.error
             
-        case is AnyAction.SetUserSignedIn:
+        case is Actions.SetUserSignedIn:
             email = ""
             password = ""
             
@@ -36,6 +36,11 @@ struct SignInForm: Reducible {
 
 // MARK: - Id
 extension SignInForm {
+
+    enum Field: String, Hashable {
+        case email, password
+    }
+
     struct Id: Hashable {
         var value: String
     }

@@ -13,22 +13,22 @@ struct SignInContainer: Container {
         .init(
             email: Binding(
                 get: { state.signInForm.email },
-                set: { store.dispatch(AnyAction.UpdateEmail(email: $0, id: SignInForm.id)) }
+                set: { store.dispatch(Actions.UpdateField(id: SignInForm.Field.email, value: $0)) }
             ),
             password: Binding(
                 get: { state.signInForm.password },
-                set: store.bind(AnyAction.UpdateSignInPassword.init(password:))
+                set: { store.dispatch(Actions.UpdateField(id: SignInForm.Field.password, value: $0)) }
             ),
             
             isEnabled: state.signInForm.isEnabledSignIn,
             isLoaderPresented: Binding(value: isLoading(state)),
-            signInAction: store.bind(AnyAction.SignIn()),
-            signInAppleAction: store.bind(AnyAction.SignIn()),
+            signInAction: store.bind(Actions.SignIn()),
+            signInAppleAction: store.bind(Actions.SignIn()),
             forgotPassword: ForgotPasswordContainer(),
             signUp: SignUpContainer(),
             error: .init(
                 get: { state.signInForm.error },
-                set: { store.dispatch(AnyAction.Error(error: $0, id: SignInForm.id)) }
+                set: { store.dispatch(Actions.Error(error: $0, id: SignInForm.id)) }
             )
         )
     }
@@ -42,11 +42,13 @@ struct SignInContainer: Container {
     }
     
     func onContainerAppear(store: EnvironmentStore<AppState>) {
-        store.dispatch(AnyAction.UpdateEmail(email: "", id: SignInForm.id))
-        store.dispatch(AnyAction.UpdateSignInPassword(password: ""))
+        store.dispatch(Actions.UpdateField(id: SignInForm.Field.email, value: ""))
+        store.dispatch(Actions.UpdateField(id: SignInForm.Field.password, value: ""))
 //        #if DEBUG
-//        store.dispatch(AnyAction.UpdateEmail(email: "asd@i.ua", id: SignInForm.id))
-//        store.dispatch(AnyAction.UpdateSignInPassword(password: "123123123"))
+//        store.dispatch(Actions.UpdateField(id: SignInForm.Field.email, value: "asd@i.ua"))
+//        store.dispatch(Actions.UpdateField(id: SignInForm.Field.password, value: "123123123"))
+//        store.dispatch(Actions.UpdateEmail(email: "asd@i.ua", id: SignInForm.id))
+//        store.dispatch(Actions.UpdateSignInPassword(password: "123123123"))
 //        #endif
     }
 }

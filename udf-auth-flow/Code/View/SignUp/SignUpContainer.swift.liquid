@@ -13,28 +13,28 @@ struct SignUpContainer: Container {
         .init(
             email: Binding(
                 get: { state.signUpForm.email },
-                set: { store.dispatch(AnyAction.UpdateEmail(email: $0, id: SignUpForm.id)) }
+                set: { store.dispatch(Actions.UpdateField(id: SignUpForm.Field.email, value: $0)) }
             ),
             password: Binding(
                 get: { state.signUpForm.password },
-                set: store.bind(AnyAction.UpdateSignUpPassword.init(password:))
+                set: { store.dispatch(Actions.UpdateField(id: SignUpForm.Field.password, value: $0)) }
             ),
             name: Binding(
                 get: { state.signUpForm.name },
-                set: store.bind(AnyAction.UpdateSignUpName.init(name:))
+                set: { store.dispatch(Actions.UpdateField(id: SignUpForm.Field.name, value: $0)) }
             ),
             isEnabled: state.signUpForm.isEnabledSignUp,
             isLoaderPresented: Binding(value: isLoading(state)),
-            signUpAction: store.bind(AnyAction.SignUp()),
+            signUpAction: store.bind(Actions.SignUp()),
             signUpAppleAction: {},
             loginAction: presentationMode.dismissAction(),
             error: Binding(
                 get: { state.signUpForm.error },
-                set: { store.dispatch(AnyAction.Error(error: $0, id: SignUpForm.id)) }
+                set: { store.dispatch(Actions.Error(error: $0, id: SignUpForm.id)) }
             ),
             isSuccessPresented: Binding(
                 get: { state.signUpForm.isSuccessPresented },
-                set: { _ in store.dispatch(AnyAction.UserSignedUp()) }
+                set: { _ in store.dispatch(Actions.UserSignedUp()) }
             ),
             successAction: presentationMode.dismissAction()
         )
