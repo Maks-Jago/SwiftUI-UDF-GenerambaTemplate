@@ -8,7 +8,7 @@ struct {{ module_info.name }}Form: Reducible {
     
     mutating func reduce(_ action: AnyAction) {
         switch action.value {
-        case let action as AnyAction.Error where action.id == {{ module_info.name }}Flow.id:
+        case let action as Actions.Error where action.id == {{ module_info.name }}Flow.id:
             error = action.error
             
         default:

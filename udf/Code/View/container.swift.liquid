@@ -6,7 +6,7 @@ import SwiftUI_UDF
 struct {{ module_info.name }}Container: Container {
     typealias ContainerComponent = {{ module_info.name }}Component
     
-    func map(state: AppState, store: AppEnvironmentStore) -> ContainerComponent.Props {
+    func map(state: AppState, store: EnvironmentStore<AppState>) -> ContainerComponent.Props {
         .init(
             
         )

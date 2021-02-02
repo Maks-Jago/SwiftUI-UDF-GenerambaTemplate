@@ -11,7 +11,7 @@ enum {{ module_info.name }}Flow: IdentifiableFlow {
     mutating func reduce(_ action: AnyAction) {
         switch action.value {
             
-        case let action as AnyAction.Error where action.id == Self.id:
+        case let action as Actions.Error where action.id == Self.id:
             self = .none
             
         default:
