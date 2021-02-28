@@ -3,7 +3,7 @@
 import Foundation
 import SwiftUI_UDF
 
-struct {{ module_info.name }}Form: Reducible {
+struct {{ module_info.name }}Form: Form {
     var error: String? = nil
     
     mutating func reduce(_ action: AnyAction) {
