@@ -4,12 +4,12 @@ import Foundation
 import SwiftUI_UDF
 
 struct {{ module_info.name }}Form: Form {
-    var error: String? = nil
+    var alert: AlertBuilder.AlertStatus = .dismissed
     
     mutating func reduce(_ action: AnyAction) {
         switch action.value {
         case let action as Actions.Error where action.id == {{ module_info.name }}Flow.id:
-            error = action.error
+            alert = .init(error: action.error)
             
         default:
             break
