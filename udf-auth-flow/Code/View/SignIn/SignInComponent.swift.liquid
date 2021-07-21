@@ -13,7 +13,7 @@ struct SignInComponent<ForgotPassword: Container, SignUp: Container>: Component 
         var signInAppleAction: Command
         var forgotPassword: ForgotPassword
         var signUp: SignUp
-        var error: Binding<String?>
+        var alertStatus: Binding<AlertBuilder.AlertStatus>
     }
     
     init(props: Props) {
@@ -28,9 +28,6 @@ struct SignInComponent<ForgotPassword: Container, SignUp: Container>: Component 
     var body: some View {
         NavigationView {
             VStack {
-                
-                Text("").errorAlert(error: props.error)
-                
                 TextField("email", text: self.props.email)
                 TextField("password", text: self.props.password)
                 
@@ -38,13 +35,13 @@ struct SignInComponent<ForgotPassword: Container, SignUp: Container>: Component 
                     Text("Sign In")
                 }
                 .disabled(!self.props.isEnabled)
+                .alert(status: props.alertStatus)
                 
                 Button(action: $isForgotPresented.toggleAction()) {
                     Text("Forgot Password")
                 }
                 .sheetContainer(isPresented: $isForgotPresented, container: props.forgotPassword)
                 .padding(.vertical, 22)
-                
                 
                 Button(action: self.$isSignUpPresented.toggleAction()) {
                     Text("Sign Up")
@@ -69,7 +66,7 @@ struct SignInComponent_Previews: PreviewProvider {
                   signInAppleAction: {},
                   forgotPassword: RenderContainer(viewToRender: ForgotPasswordComponent_Previews.previews),
                   signUp: RenderContainer(viewToRender: SignUpComponent_Previews.previews),
-                  error: .constant(nil)
+                  alertStatus: .init(value: .dismissed)
             )
         )
     }

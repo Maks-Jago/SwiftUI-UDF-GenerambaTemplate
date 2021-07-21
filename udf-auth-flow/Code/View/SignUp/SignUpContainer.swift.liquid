@@ -11,32 +11,23 @@ struct SignUpContainer: Container {
 
     func map(state: AppState, store: EnvironmentStore<AppState>) -> ContainerComponent.Props {
         .init(
-            email: Binding(
-                get: { state.signUpForm.email },
-                set: { store.dispatch(Actions.UpdateField(id: SignUpForm.Field.email, value: $0)) }
-            ),
-            password: Binding(
-                get: { state.signUpForm.password },
-                set: { store.dispatch(Actions.UpdateField(id: SignUpForm.Field.password, value: $0)) }
-            ),
-            name: Binding(
-                get: { state.signUpForm.name },
-                set: { store.dispatch(Actions.UpdateField(id: SignUpForm.Field.name, value: $0)) }
-            ),
+            email: Binding(form: state.signUpForm.email, keyPath: \SignUpForm.email, store: store),
+            password: Binding(form: state.signUpForm.password, keyPath: \SignUpForm.password, store: store),
+            name: Binding(form: state.signUpForm.name, keyPath: \SignUpForm.name, store: store),
             isEnabled: state.signUpForm.isEnabledSignUp,
             isLoaderPresented: Binding(value: state.authFlow == .signUp ),
             signUpAction: store.bind(Actions.SignUp()),
             signUpAppleAction: {},
             loginAction: presentationMode.dismissAction(),
-            error: Binding(
-                get: { state.signUpForm.error },
-                set: { store.dispatch(Actions.Error(error: $0, id: AuthFlow.signUpId)) }
-            ),
             isSuccessPresented: Binding(
                 get: { state.signUpForm.isSuccessPresented },
                 set: { _ in store.dispatch(Actions.UserSignedUp()) }
             ),
-            successAction: presentationMode.dismissAction()
+            successAction: presentationMode.dismissAction(),
+            alertStatus: Binding(   
+                get: { store.state.signUpForm.alert },
+                set: { store.dispatch(Actions.UpdateAlertStatus(status: $0, id: AuthFlow.signUpId)) }
+            )
         )
     }
 }

@@ -14,9 +14,9 @@ struct SignUpComponent: Component {
         var signUpAction: Command
         var signUpAppleAction: Command
         var loginAction: Command
-        var error: Binding<String?>
         var isSuccessPresented: Binding<Bool>
         var successAction: Command
+        var alertStatus: Binding<AlertBuilder.AlertStatus>
     }
     
     var props: Props
@@ -55,8 +55,8 @@ struct SignUpComponent: Component {
 
 struct SignUpComponent_Previews: PreviewProvider {
     static var previews: some View {
-        SignUpComponent(props:
-            .init(email: .constant(""),
+        SignUpComponent(
+            props: .init(email: .constant(""),
                   password: .constant(""),
                   name: .constant(""),
                   isEnabled: false,
@@ -64,9 +64,9 @@ struct SignUpComponent_Previews: PreviewProvider {
                   signUpAction: {},
                   signUpAppleAction: {},
                   loginAction: {},
-                  error: .constant(nil),
                   isSuccessPresented: .constant(false),
-                  successAction: {}
+                  successAction: {},
+                  alertStatus: .init(value: .dismissed)
             )
         )
     }
