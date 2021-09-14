@@ -16,7 +16,7 @@ struct {{ module_info.name }}Form: Form {
         case is Actions.ResetForm<Self>:
             self = .init()
 
-        case let action as Actions.UpdateAlertStatus where action.id == <# Flow #>.id:
+        case let action as Actions.UpdateAlertStatus where action.id == {{ module_info.name }}Flow.id:
             alert = action.status
 
         default:
