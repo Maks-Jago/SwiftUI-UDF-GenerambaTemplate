@@ -7,10 +7,18 @@ struct {{ module_info.name }}Form: Form {
     var alert: AlertBuilder.AlertStatus = .dismissed
     
     mutating func reduce(_ action: AnyAction) {
+        reduceBasicFormFields(action)
+
         switch action.value {
         case let action as Actions.Error where action.id == {{ module_info.name }}Flow.id:
             alert = .init(error: action.error)
-            
+
+        case is Actions.ResetForm<Self>:
+            self = .init()
+
+        case let action as Actions.UpdateAlertStatus where action.id == <# Flow #>.id:
+            alert = action.status
+
         default:
             break
         }
