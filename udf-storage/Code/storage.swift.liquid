@@ -9,12 +9,10 @@ struct All<# {{ module_info.name }} #>: Reducible {
     mutating func reduce(_ action: AnyAction) {
         switch action.value {
         case let action as Actions.DidLoadItems<{{ module_info.name }}>:
-            action.items.forEach {
-                byId[$0.id] = $0
-            }
+            byId.insert(items: action.items)
             
         case let action as Actions.DidLoadItem<{{ module_info.name }}>:
-            byId[action.item.id] = action.item
+            byId.insert(item: action.item)
             
         case let action as Actions.DidUpdateItem<{{ module_info.name }}>:
             byId[action.item.id] = action.item
