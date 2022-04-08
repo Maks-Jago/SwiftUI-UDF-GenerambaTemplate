@@ -1,9 +1,13 @@
 {% include 'header' %}
 
 import SwiftUI_UDF
-import SwiftUI
+import Combine
 
-final class {{ module_info.name }}Middleware: SyncMiddleware<AppState> {
+final class {{ module_info.name }}Middleware: ObservableMiddleware<AppState> {
+
+    override func scope(for state: SourceOfTruth<AppState>) -> Scope {
+        <#state.#>
+    }
 
     override func observe(state: AppState) {
         switch state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1,module_info.name.size }}Flow {

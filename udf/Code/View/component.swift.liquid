@@ -5,7 +5,7 @@ import SwiftUI_UDF
 
 struct {{ module_info.name }}Component: Component {
     struct Props {
-
+        var router: Router<{{ module_info.name }}Routing> = .init()
     }
     
     var props: Props

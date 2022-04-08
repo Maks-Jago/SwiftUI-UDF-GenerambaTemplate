@@ -1,0 +1,16 @@
+{% include 'header' %}
+
+import SwiftUI
+import SwiftUI_UDF
+
+struct {{ module_info.name }}Routing: Routing {
+    enum Route {
+        //case welcome
+    }
+    
+    @ViewBuilder func view(for route: Route) -> some View {
+        switch route {
+        //case .welcome: WelcomeContainer()
+        }
+    }
+}

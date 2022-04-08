@@ -11,6 +11,7 @@ code_files:
 # View layer
 - {name: View/Container.swift, path: Code/View/container.swift.liquid}
 - {name: View/Component.swift, path: Code/View/component.swift.liquid}
+- {name: View/Router.swift, path: Code/View/router.swift.liquid}
 
 # State layer
 - {name: State/Form.swift, path: Code/State/form.swift.liquid}
