@@ -1,11 +1,12 @@
 {% include 'header' %}
 
 import XCTest
-@testable import SwiftUI_UDF
+import SwiftUI_UDF
+@testable import {{ module_info.test_target }}
 
 final class {{ module_info.name }}FormTests: XCTestCase {
     struct AppState: AppReducer & Equatable {
-        var {{ module_info.name }}Form = {{ module_info.name }}Form()
+        var {{ module_info.name | downcase }}Form = {{ module_info.name }}Form()
     }
 
     var store: XCTestStore<AppState>!
@@ -22,14 +23,14 @@ final class {{ module_info.name }}FormTests: XCTestCase {
     func test_WhenErrorOccurred_AlertShouldBeShown() {
         let someError = "Some error occurred"
         store.dispatch(Actions.Error(error: someError, id: {{ module_info.name }}Flow.id))
-        XCTAssertEqual(store.state.nestedForm.alert, .init(error: someError))
+        XCTAssertEqual(store.state.{{ module_info.name | downcase }}Form.alert, .init(error: someError))
     }
 
     func test_UpdateAlertStatusAction_ShouldChangeAlert() {
         store.dispatch(Actions.UpdateAlertStatus(status: .init(message: "some message"), id: {{ module_info.name }}Flow.id))
-        XCTAssertEqual(store.state.nestedForm.alert, .init(message: "some message"))
+        XCTAssertEqual(store.state.{{ module_info.name | downcase }}Form.alert, .init(message: "some message"))
 
         store.dispatch(Actions.UpdateAlertStatus(status: .dismissed, id: {{ module_info.name }}Flow.id))
-        XCTAssertEqual(store.state.nestedForm.alert, .dismissed)
+        XCTAssertEqual(store.state.{{ module_info.name | downcase }}Form.alert, .dismissed)
     }
 }
