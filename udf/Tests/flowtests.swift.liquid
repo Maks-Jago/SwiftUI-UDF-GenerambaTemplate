@@ -6,7 +6,7 @@ import SwiftUI_UDF
 
 final class {{ module_info.name }}FlowTests: XCTestCase {
     struct AppState: AppReducer & Equatable {
-        var {{ module_info.name | downcase }}Flow = {{ module_info.name }}Flow()
+        var {{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Flow = {{ module_info.name }}Flow()
     }
 
     var store: XCTestStore<AppState>!
@@ -23,7 +23,7 @@ final class {{ module_info.name }}FlowTests: XCTestCase {
     /*
     func test_WhenErrorOccurred_ShouldBeInNoneCase() {
         store.dispatch(Actions.Error(error: "Some error occurred", id: {{ module_info.name }}Flow.id))        
-        XCTAssertEqual(store.state.{{ module_info.name | downcase }}Flow, .none)
+        XCTAssertEqual(store.state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Flow, .none)
     }
     */
 }
