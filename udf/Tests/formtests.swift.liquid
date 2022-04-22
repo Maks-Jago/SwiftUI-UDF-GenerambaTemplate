@@ -1,0 +1,35 @@
+{% include 'header' %}
+
+import XCTest
+@testable import SwiftUI_UDF_Binary
+
+final class {{ module_info.name }}FormTests: XCTestCase {
+    struct AppState: AppReducer & Equatable {
+        var {{ module_info.name }}Form = {{ module_info.name }}Form()
+    }
+
+    var store: XCTestStore<AppState>!
+
+    override func setUpWithError() throws {
+        store = .init(initial: AppState())
+        // Put setup code here. This method is called before the invocation of each test method in the class.
+    }
+
+    override func tearDownWithError() throws {
+        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    }
+
+    func test_WhenErrorOccurred_AlertShouldBeShown() {
+        let someError = "Some error occurred"
+        store.dispatch(Actions.Error(error: someError, id: {{ module_info.name }}Flow.id))
+        XCTAssertEqual(store.state.nestedForm.alert, .init(error: someError))
+    }
+
+    func test_UpdateAlertStatusAction_ShouldChangeAlert() {
+        store.dispatch(Actions.UpdateAlertStatus(status: .init(message: "some message"), id: {{ module_info.name }}Flow.id))
+        XCTAssertEqual(store.state.nestedForm.alert, .init(message: "some message"))
+
+        store.dispatch(Actions.UpdateAlertStatus(status: .dismissed, id: {{ module_info.name }}Flow.id))
+        XCTAssertEqual(store.state.nestedForm.alert, .dismissed)
+    }
+}
