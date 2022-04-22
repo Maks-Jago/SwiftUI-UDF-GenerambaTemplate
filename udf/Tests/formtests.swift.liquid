@@ -21,14 +21,14 @@ final class {{ module_info.name }}FormTests: XCTestCase {
     }
 
     func test_WhenErrorOccurred_AlertShouldBeShown() {
-        let someError = "Some error occurred"
-        store.dispatch(Actions.Error(error: someError, id: {{ module_info.name }}Flow.id))
-        XCTAssertEqual(store.state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Form.alert.status, .init(error: someError))
+        XCTAssertEqual(store.state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Form.alert.status, .dismissed)
+        store.dispatch(Actions.Error(error: "Some error occurred", id: {{ module_info.name }}Flow.id))
+        XCTAssertNotEqual(store.state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Form.alert.status, .dismissed)
     }
 
     func test_UpdateAlertStatusAction_ShouldChangeAlert() {
         store.dispatch(Actions.UpdateAlertStatus(status: .init(message: "some message"), id: {{ module_info.name }}Flow.id))
-        XCTAssertEqual(store.state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Form.alert.status, .init(message: "some message"))
+        XCTAssertNotEqual(store.state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Form.alert.status, .dismissed)
 
         store.dispatch(Actions.UpdateAlertStatus(status: .dismissed, id: {{ module_info.name }}Flow.id))
         XCTAssertEqual(store.state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Form.alert.status, .dismissed)
