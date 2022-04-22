@@ -2,7 +2,7 @@
 
 import XCTest
 import SwiftUI_UDF
-@testable import {{ module_info.test_target }}
+@testable import {{ module_info.project_targets.first }}
 
 final class {{ module_info.name }}FormTests: XCTestCase {
     struct AppState: AppReducer & Equatable {
