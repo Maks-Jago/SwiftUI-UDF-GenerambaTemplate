@@ -20,11 +20,16 @@ code_files:
 # Side effect (Async) layer
 - {name: Middleware.swift, path: Code/Async/middleware.swift.liquid}
 
-# The declarations for test files
-test_files:
+# The declarations for unit test files
+test_unit_files:
 
 # Form tests
 - {name: FormTests.swift, path: Tests/formtests.swift.liquid}
 
 # Flow tests
 - {name: FlowTests.swift, path: Tests/flowtests.swift.liquid}
+
+# The declarations for snapshot test files
+test_snapshot_files:
+
+- {name: ComponentSnapshotTests.swift, path: Tests/componentsnapshottest.swift.liquid}
