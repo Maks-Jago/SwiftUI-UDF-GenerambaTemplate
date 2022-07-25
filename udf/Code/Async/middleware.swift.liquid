@@ -6,15 +6,15 @@ import Combine
 final class {{ module_info.name }}Middleware: ObservableMiddleware<AppState> {
 
     override func scope(for state: SourceOfTruth<AppState>) -> Scope {
-        <#state.#>
+        state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Flow
     }
 
     override func observe(state: AppState) {
         switch state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Flow {
-        case .loading:
+        //case .loading:
             //Run your load effect here. Replace `API.load()` to your publisher
-            execute(Effect(<#API.LoadPublisher()#>, id: {{ module_info.name }}Flow.id))
-            
+            //execute(Effect(<#API.LoadPublisher()#>, id: {{ module_info.name }}Flow.id))
+            //execute()
         default:
             break
         }
