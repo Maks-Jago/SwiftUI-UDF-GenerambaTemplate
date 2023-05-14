@@ -1,13 +1,13 @@
 {% include 'header' %}
 
 import Foundation
-import SwiftUI_UDF
+import UDF
 
 struct All<# {{ module_info.name }} #>: Reducible {
-    var byId: [{{ module_info.name }}.Id: {{ module_info.name }}] = [:]
+    var byId: [{{ module_info.name }}.ID: {{ module_info.name }}] = [:]
     
-    mutating func reduce(_ action: AnyAction) {
-        switch action.value {
+    mutating func reduce(_ action: some Action) {
+        switch action {
         case let action as Actions.DidLoadItems<{{ module_info.name }}>:
             byId.insert(items: action.items)
             

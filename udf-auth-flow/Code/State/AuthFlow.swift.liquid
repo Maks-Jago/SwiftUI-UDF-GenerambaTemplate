@@ -1,7 +1,7 @@
 {% include 'header' %}
 
 import Foundation
-import SwiftUI_UDF
+import UDF
 
 enum AuthFlow: IdentifiableFlow {
     case none, signIn, signUp, forgotPassword
@@ -13,7 +13,7 @@ enum AuthFlow: IdentifiableFlow {
     static var forgotPasswordId: FlowId = .init(value: "ForgotPassword")
     
     mutating func reduce(_ action: AnyAction) {
-        switch action.value {
+        switch action {
         
         case is Actions.SendForgotPassword:
             self = .forgotPassword
