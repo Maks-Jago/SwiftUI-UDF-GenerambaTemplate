@@ -1,15 +1,23 @@
 {% include 'header' %}
 
-import SwiftUI_UDF
+import UDF
 import Combine
 
-final class {{ module_info.name }}Middleware: ObservableMiddleware<AppState> {
+final class {{ module_info.name }}Middleware: BaseConcurrencyObservableMiddleware<AppState> {
+    enum Cancelation: Hashable, CaseIterable {
+        case <#loadSomething#>
+    }
 
-    override func scope(for state: SourceOfTruth<AppState>) -> Scope {
+    struct Environment {
+    }
+
+    var environment: Environment!
+
+    func scope(for state: AppState) -> Scope {
         state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Flow
     }
 
-    override func observe(state: AppState) {
+    func observe(state: AppState) {
         switch state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Flow {
         //case .loading:
             //Run your load effect here. Replace `API.load()` to your publisher
@@ -18,5 +26,21 @@ final class {{ module_info.name }}Middleware: ObservableMiddleware<AppState> {
         default:
             break
         }
+    }
+}
+
+// MARK: - Environment build methods
+extension {{ module_info.name }}Middleware {
+
+    static func buildLiveEnvironment(for store: some Store<AppState>) -> Environment {
+        Environment(
+            
+        )
+    }
+
+    static func buildTestEnvironment(for store: some Store<AppState>) -> Environment {
+        Environment(
+
+        )
     }
 }

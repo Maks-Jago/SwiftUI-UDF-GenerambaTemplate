@@ -1,13 +1,13 @@
 {% include 'header' %}
 
 import Foundation
-import SwiftUI_UDF
+import UDF
 
 struct {{ module_info.name }}Form: Form {
     var alert: AlertBuilder.AlertStatus = .dismissed
     
-    mutating func reduce(_ action: AnyAction) {
-        switch action.value {
+    mutating func reduce(_ action: some Action) {
+        switch action {
         case let action as Actions.Error where action.id == {{ module_info.name }}Flow.id:
             alert = .init(error: action.error)
 
