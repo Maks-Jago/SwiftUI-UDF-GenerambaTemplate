@@ -12,7 +12,7 @@ struct {{ module_info.name }}Container: Container {
 
     func map(store: EnvironmentStore<AppState>) -> ContainerComponent.Props {
         .init(
-            
+            alertStatus: Binding(store.state.${{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Form.alert)
         )
     }
     
