@@ -17,7 +17,12 @@ struct {{ module_info.name }}Component: Component {
     
     var body: some View {
         List {
-            ForEach(props.isRedacted ? <#DataModel#>.fakeItems(count: 10).ids : itemIds, id: \.self) { itemId in
+            ForEach(
+                props.isRedacted 
+                ? <#DataModel#>.fakeItems(count: 10).ids 
+                : itemIds, id: \.self
+            ) { itemId in
+            
             let item = props.itemById(itemId)
             Text("{{ module_info.name }}")
                 .redacted(reason: props.isRedacted ? .placeholder : [])
