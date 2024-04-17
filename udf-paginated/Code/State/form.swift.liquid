@@ -1,0 +1,31 @@
+{% include 'header' %}
+
+import Foundation
+import UDF
+
+struct {{ module_info.name }}Form: Form {
+    var paginator: Paginator = .init(
+        <#DataModel#>.self,
+        flowId: {{ module_info.name }}Flow.id,
+        perPage: kPerPage
+    )
+    var page: PaginationPage { paginator.page }
+    var wishesIds: [<#DataModel#>.ID] { paginator.items.elements }
+    var alert: AlertBuilder.AlertStatus = .dismissed
+    
+    mutating func reduce(_ action: some Action) {
+        switch action {
+        case let action as Actions.Error where action.id == {{ module_info.name }}Flow.id:
+            alert = .init(error: action.error)
+
+        case let action as Actions.UpdateAlertStatus where action.id == {{ module_info.name }}Flow.id:
+            alert = action.status
+
+        case is Actions.ResetForm<Self>:
+            self = .init()
+
+        default:
+            break
+        }
+    }
+}

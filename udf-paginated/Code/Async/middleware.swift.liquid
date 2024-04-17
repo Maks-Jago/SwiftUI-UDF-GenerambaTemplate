@@ -1,0 +1,54 @@
+{% include 'header' %}
+
+import UDF
+
+final class {{ module_info.name }}Middleware: BaseConcurrencyObservableMiddleware<AppState> {
+    enum Cancellation: Hashable, CaseIterable {
+        case loading
+    }
+
+    struct Environment {
+    }
+
+    var environment: Environment!
+
+    func scope(for state: AppState) -> Scope {
+        state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Flow
+    }
+
+    func observe(state: AppState) {
+        switch state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Flow {
+            case .loading(let page):
+            execute(
+                id: {{ module_info.name }}Flow.id,
+                cancelation: Cancellation.loading
+            ) { taskId in
+                // TODO: Add data loadiong logic here
+
+                return Actions.DidLoadItems(
+                    items: <#items#>,
+                    id: taskId
+                )
+            }
+
+            default:
+                break
+        }
+    }
+}
+
+// MARK: - Environment build methods
+extension {{ module_info.name }}Middleware {
+
+    static func buildLiveEnvironment(for store: some Store<AppState>) -> Environment {
+        Environment(
+            
+        )
+    }
+
+    static func buildTestEnvironment(for store: some Store<AppState>) -> Environment {
+        Environment(
+
+        )
+    }
+}

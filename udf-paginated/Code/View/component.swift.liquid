@@ -1,0 +1,48 @@
+{% include 'header' %}
+
+import SwiftUI
+import UDF
+
+struct {{ module_info.name }}Component: Component {
+    struct Props {
+        var itemIds: [<#DataModel#>.ID]
+        var itemById: (<#DataModel#>.ID) -> <#DataModel#>
+        var loadMoreItems: Command
+        var isRefreshing: Binding<Bool>
+        var alertStatus: Binding<AlertBuilder.AlertStatus>
+        var router: Router<{{ module_info.name }}Routing> = .init()
+    }
+    
+    var props: Props
+    
+    var body: some View {
+        List {
+            ForEach(props.isRedacted ? <#DataModel#>.fakeItems(count: 10).ids : itemIds, id: \.self) { itemId in
+            let item = props.itemById(itemId)
+            Text("{{ module_info.name }}")
+                .redacted(reason: props.isRedacted ? .placeholder : [])
+                .onAppear {
+                    if itemId == props.itemIds.last {
+                        props.loadMoreItems()
+                    }
+                }
+            }
+        }
+        .pullToRefresh(isRefreshing: props.isRefreshing)
+        .alert(status: props.alertStatus)
+    }
+}
+
+struct {{ module_info.name }}Component_Previews: PreviewProvider {
+    static var previews: some View {
+        {{ module_info.name }}Component(
+            props: .init(
+                itemIds: [],
+                itemById: { _ in .fakeItem() },
+                loadMoreItems: {},
+                isRefreshing: .constant(false),
+                alertStatus: .constant(.dismissed),
+            )
+        ).body.previewDisplayName("Empty")
+    }
+}
