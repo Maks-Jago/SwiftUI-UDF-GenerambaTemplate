@@ -10,5 +10,8 @@ Template of UDF module for auto generation process
 ### To generate UDF Module
 `generamba udf <Module name>`
 
+### To generate UDF Module with paginated list
+`generamba gen <Module name> udf-paginated`
+
 ### To generate storage
 `generamba storage <Storage name> --module_path /Code/Domain/Storage`
