@@ -13,12 +13,10 @@ enum {{ module_info.name }}Flow: IdentifiableFlow {
             
         case let action as Actions.Error where action.id == Self.id:
             self = .none
-/*          
-        //If you have cancellations logic in your middleware and you need to handle cancelation event
-        case let action as Actions.DidCancelEffect where action.cancelation == ObservableMiddlewareToCancel.Cancelation.message:
-                //Actions.DidCancelEffect where ObservableMiddlewareToCancel.Cancelation.allCases.contains(action.cancelation):
+            
+        case let action as Actions.DidCancelEffect where {{ module_info.name }}Middleware.Cancellation.allCases.contains(action.cancelation):
             self = .none
-*/
+            
         default:
             break
         }

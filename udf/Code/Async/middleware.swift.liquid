@@ -1,10 +1,9 @@
 {% include 'header' %}
 
 import UDF
-import Combine
 
 final class {{ module_info.name }}Middleware: BaseConcurrencyObservableMiddleware<AppState> {
-    enum Cancelation: Hashable, CaseIterable {
+    enum Cancellation: Hashable, CaseIterable {
         case <#loadSomething#>
     }
 
