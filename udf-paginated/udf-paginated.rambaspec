@@ -1,0 +1,35 @@
+# Template information section
+name: "udf-paginated"
+summary: "SwiftUI-UDF template. Used in 'You are launched'"
+author: "Max Kuznetsov"
+version: "1.0.0"
+license: "MIT"
+
+# The declarations for code files
+
+code_files:
+# View layer
+- {name: View/Container.swift, path: Code/View/container.swift.liquid}
+- {name: View/Component.swift, path: Code/View/component.swift.liquid}
+- {name: View/Router.swift, path: Code/View/router.swift.liquid}
+
+# State layer
+- {name: State/Form.swift, path: Code/State/form.swift.liquid}
+- {name: State/Flow.swift, path: Code/State/flow.swift.liquid}
+
+# Side effect (Async) layer
+- {name: Middleware.swift, path: Code/Async/middleware.swift.liquid}
+
+# The declarations for unit test files
+test_unit_files:
+
+# Form tests
+- {name: FormTests.swift, path: Tests/formtests.swift.liquid}
+
+# Flow tests
+- {name: FlowTests.swift, path: Tests/flowtests.swift.liquid}
+
+# The declarations for snapshot test files
+test_snapshot_files:
+
+- {name: ComponentSnapshotTests.swift, path: Tests/componentsnapshottest.swift.liquid}

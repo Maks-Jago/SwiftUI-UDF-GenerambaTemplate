@@ -1,0 +1,30 @@
+{% include 'header' %}
+
+import Foundation
+import UDF
+
+enum {{ module_info.name }}Flow: IdentifiableFlow {
+    case none, loading(Int)
+    
+    init() { self = .none }
+    
+    mutating func reduce(_ action: some Action) {
+        switch action {
+
+        case let action as Actions.LoadPage where action.id == Self.id:
+            self = .loading(action.pageNumber)
+
+        case let action as Actions.DidLoadItems<<#DataModel#>> where action.id == Self.id:
+            self = .none
+            
+        case let action as Actions.Error where action.id == Self.id:
+            self = .none
+            
+        case let action as Actions.DidCancelEffect where {{ module_info.name }}Middleware.Cancellation.allCases.contains(action.cancelation):
+            self = .none
+            
+        default:
+            break
+        }
+    }
+}

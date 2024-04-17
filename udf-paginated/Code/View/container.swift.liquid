@@ -1,0 +1,27 @@
+{% include 'header' %}
+
+import SwiftUI
+import UDF
+
+struct {{ module_info.name }}Container: Container {
+    typealias ContainerComponent = {{ module_info.name }}Component
+    
+    func scope(for state: AppState) -> Scope {
+        state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Form
+    }
+
+    func map(store: EnvironmentStore<AppState>) -> ContainerComponent.Props {
+        .init(
+            // TODO: Add logic
+            itemIds: [],
+            itemById: { _ in .fakeItem() },
+            loadMoreItems: {},
+            isRefreshing: .constant(false),
+            alertStatus: store.state.${{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Form.alert
+        )
+    }
+    
+    func onContainerDidLoad(store: EnvironmentStore<AppState>) {
+
+    }
+}
