@@ -14,7 +14,7 @@ enum {{ module_info.name }}Flow: IdentifiableFlow {
         case let action as Actions.Error where action.id == Self.id:
             self = .none
             
-        case let action as Actions.DidCancelEffect where {{ module_info.name }}Middleware.Cancellation.allCases.contains(action.cancelation):
+        case let action as Actions.DidCancelEffect where {{ module_info.name }}Middleware.Cancellation.allCases.contains(action.cancellation):
             self = .none
             
         default:
