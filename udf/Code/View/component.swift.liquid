@@ -5,7 +5,7 @@ import UDF
 
 struct {{ module_info.name }}Component: Component {
     struct Props {
-        var alertStatus: Binding<AlertBuilder.AlertStatus>
+        var alert: Binding<AlertBuilder.AlertStatus>
         var router: Router<{{ module_info.name }}Routing> = .init()
     }
     
@@ -13,16 +13,14 @@ struct {{ module_info.name }}Component: Component {
     
     var body: some View {
         Text("{{ module_info.name }}")
-            .alert(status: props.alertStatus)
+            .alert(status: props.alert)
     }
 }
 
-struct {{ module_info.name }}Component_Previews: PreviewProvider {
-    static var previews: some View {
-        {{ module_info.name }}Component(
-            props: .init(
-                alertStatus: .constant(.dismissed)
-            )
+#Preview {
+    {{ module_info.name }}Component(
+        props: .init(
+            alert: .constant(.dismissed)
         )
-    }
+    )
 }

@@ -2,7 +2,7 @@
 
 import UDF
 
-final class {{ module_info.name }}Middleware: BaseConcurrencyObservableMiddleware<AppState> {
+final class {{ module_info.name }}Middleware: BaseObservableMiddleware<AppState> {
     enum Cancellation: Hashable, CaseIterable {
         case <#loadSomething#>
     }
