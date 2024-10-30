@@ -11,7 +11,7 @@ final class {{ module_info.name }}Middleware: BaseObservableMiddleware<AppState>
     struct Environment {
 		var <#loadSomething#>: (
 
-		) async throws <#someModel#>
+		) async throws -> <#someModel#>
     }
 
     var environment: Environment!
@@ -22,18 +22,18 @@ final class {{ module_info.name }}Middleware: BaseObservableMiddleware<AppState>
 
     func observe(state: AppState) {
         switch state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Flow {
-        // case .loading:
-			// execute(
-			// id: {{ module_info.name }}Flow.id,
-			// cancellation: Cancellation.<#loadSomething#>,
-			// mapError: mapAPIError
-			// ) { flowID in
-			// let models = try await self.environment.<#loadSomething#>(
-			// 	<#some agrument#>                       
-			// )
-			//
-			// return Actions.DidLoadItems(item: models, id: flowID)
-			// }            
+//        case .loading:
+//            execute(
+//                id: {{ module_info.name }}Flow.id,
+//                cancellation: Cancellation.<#loadSomething#>,
+//                mapError: mapAPIError
+//            ) { flowID in
+//                let models = try await self.environment.<#loadSomething#>(
+//                    <#some agrument#>
+//                )
+//                
+//                return Actions.DidLoadItems(item: models, id: flowID)
+//            }    
 
         default:
             break
@@ -47,7 +47,7 @@ extension {{ module_info.name }}Middleware {
         Environment(
         	<#loadSomething#>: { <#some agrument#>  in 
 				try await <#SomeAPIClient.loadSomething#>(
-				<#some agrument#>: <#some agrument#> 
+					<#some agrument#>: <#some agrument#> 
 				).map(\.<#asSomeModel#> )
 	    	}
         )
