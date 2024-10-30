@@ -1,13 +1,17 @@
 {% include 'header' %}
 
 import UDF
+Import API
 
 final class {{ module_info.name }}Middleware: BaseObservableMiddleware<AppState> {
-    enum Cancellation: Hashable, CaseIterable {
+    enum Cancellation: Hashable {
         case <#loadSomething#>
     }
 
     struct Environment {
+		var <#loadSomething#>: (
+
+		) async throws <#someModel#>
     }
 
     var environment: Environment!
@@ -18,10 +22,19 @@ final class {{ module_info.name }}Middleware: BaseObservableMiddleware<AppState>
 
     func observe(state: AppState) {
         switch state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Flow {
-        //case .loading:
-            //Run your load effect here. Replace `API.load()` to your publisher
-            //execute(Effect(<#API.LoadPublisher()#>, id: {{ module_info.name }}Flow.id))
-            //execute()
+        // case .loading:
+			// execute(
+			// id: {{ module_info.name }}Flow.id,
+			// cancellation: Cancellation.<#loadSomething#>,
+			// mapError: mapAPIError
+			// ) { flowID in
+			// let models = try await self.environment.<#loadSomething#>(
+			// 	<#some agrument#>                       
+			// )
+			//
+			// return Actions.DidLoadItems(item: models, id: flowID)
+			// }            
+
         default:
             break
         }
@@ -30,16 +43,19 @@ final class {{ module_info.name }}Middleware: BaseObservableMiddleware<AppState>
 
 // MARK: - Environment build methods
 extension {{ module_info.name }}Middleware {
-
     static func buildLiveEnvironment(for store: some Store<AppState>) -> Environment {
         Environment(
-            
+        	<#loadSomething#>: { <#some agrument#>  in 
+				try await <#SomeAPIClient.loadSomething#>(
+				<#some agrument#>: <#some agrument#> 
+				).map(\.<#asSomeModel#> )
+	    	}
         )
     }
 
     static func buildTestEnvironment(for store: some Store<AppState>) -> Environment {
         Environment(
-
+	    	<#loadSomething#>: { _  in .testItem() }
         )
     }
 }
