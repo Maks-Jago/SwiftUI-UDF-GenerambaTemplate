@@ -17,6 +17,6 @@ struct {{ module_info.name }}Container: Container {
     }
     
     func onContainerDidLoad(store: EnvironmentStore<AppState>) {
-
+        store.dispatch(Actions.<#LoadSomething#>())
     }
 }
