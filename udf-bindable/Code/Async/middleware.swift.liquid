@@ -1,0 +1,63 @@
+{% include 'header' %}
+
+import UDF
+import API
+
+final class {{ module_info.name }}Middleware: BaseObservableMiddleware<AppState> {
+    enum Cancellation: Hashable {
+        case <#loadSomething#>(<#BindedModel.ID#>)
+    }
+
+    struct Environment {
+        var <#loadSomething#>: () async throws -> <#someModel#>
+    }
+
+    var environment: Environment!
+
+    func scope(for state: AppState) -> Scope {
+        state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Flow
+    }
+
+    func observe(state: AppState) {
+        for (id, flow) in state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Flow {
+            switch flow {
+//            case .loading:
+//                execute(
+//                    id: {{ module_info.name }}Flow.id,
+//                    cancellation: Cancellation.<#loadSomething#>(<#BindedModel.ID#>),
+//                    mapError: { flowID, error in
+//                        bindedMapAPIError(flowID, error, to: state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Form.containerType, by: id)
+//                    }
+//                ) { flowID in
+//                    let models = try await self.environment.<#loadSomething#>(
+//                        <#some argument#>
+//                    )
+//                    return Actions.DidLoadItems(items: models, id: flowID)
+//                        .binded(to: state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Form.containerType, by: id)
+//                }
+
+            default:
+                break
+            }
+        }
+    }
+}
+
+// MARK: - Environment build methods
+extension {{ module_info.name }}Middleware {
+    static func buildLiveEnvironment(for store: some Store<AppState>) -> Environment {
+        Environment(
+            <#loadSomething#>: { <#some argument#> in
+                try await <#SomeAPIClient.loadSomething#>(
+                    <#some argument#>: <#some argument#>
+                ).map(\.<#asSomeModel#>)
+            }
+        )
+    }
+
+    static func buildTestEnvironment(for store: some Store<AppState>) -> Environment {
+        Environment(
+            <#loadSomething#>: { _ in .testItem() }
+        )
+    }
+}

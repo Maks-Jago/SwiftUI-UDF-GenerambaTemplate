@@ -1,0 +1,26 @@
+{% include 'header' %}
+
+import SwiftUI
+import UDF
+
+struct {{ module_info.name }}Component: Component {
+    struct Props {
+        var alert: Binding<AlertBuilder.AlertStatus>
+        var router: Router<{{ module_info.name }}Routing> = .init()
+    }
+    
+    var props: Props
+    
+    var body: some View {
+        Text("{{ module_info.name }}")
+            .alert(status: props.alert)
+    }
+}
+
+#Preview {
+    {{ module_info.name }}Component(
+        props: .init(
+            alert: .constant(.dismissed)
+        )
+    )
+}

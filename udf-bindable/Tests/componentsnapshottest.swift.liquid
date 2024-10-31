@@ -1,0 +1,23 @@
+{% include 'header' %}
+
+import Foundation
+import XCTest
+import SwiftUISnapshotTestCase
+import SwiftUI
+import UDF
+@testable import {{ module_info.test_snapshot_testable_import }}
+
+final class {{ module_info.name }}ComponentTests: SnapshotTestCase {
+    override func setUp() {
+        self.isRecording = false
+    }
+
+    func test_{{ module_info.name }}Component() {
+        snapshot(
+            for: {{ module_info.name }}Component(
+                props: .init(
+                )
+            )
+        )
+    }
+}

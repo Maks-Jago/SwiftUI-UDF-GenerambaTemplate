@@ -1,0 +1,35 @@
+{% include 'header' %}
+
+import SwiftUI
+import UDF
+
+struct {{ module_info.name }}Container: BindableContainer {
+    typealias ContainerComponent = {{ module_info.name }}Component
+    
+    let id: <#BindableModel.ID#>
+    
+    func scope(for state: AppState) -> Scope {
+        state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Form[id]
+        state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Flow[id]
+    }
+    
+    func map(store: EnvironmentStore<AppState>) -> ContainerComponent.Props {
+        .init(
+            alert: store.$state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Form[id].alert
+        )
+    }
+    
+    func onContainerDidLoad(store: EnvironmentStore<AppState>) {
+        store.dispatch(Actions.<#LoadSomething#>().binded(to: self))
+    }
+}
+
+private extension {{ module_info.name }}Container {
+    var form: {{ module_info.name }}Form {
+        store.state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Form[id] ?? .init()
+    }
+
+    var flow: {{ module_info.name }}Flow {
+        store.state.{{ module_info.name | slice: 0 | downcase }}{{ module_info.name | slice: 1, module_info.name.size }}Flow[id] ?? .init()
+    }
+}
