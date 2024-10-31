@@ -1,7 +1,7 @@
 {% include 'header' %}
 
 import UDF
-Import API
+import API
 
 final class {{ module_info.name }}Middleware: BaseObservableMiddleware<AppState> {
     enum Cancellation: Hashable {
@@ -32,7 +32,7 @@ final class {{ module_info.name }}Middleware: BaseObservableMiddleware<AppState>
 //                    <#some agrument#>
 //                )
 //                
-//                return Actions.DidLoadItems(item: models, id: flowID)
+//                return Actions.DidLoadItems(items: models, id: flowID)
 //            }    
 
         default:
@@ -48,14 +48,14 @@ extension {{ module_info.name }}Middleware {
         	<#loadSomething#>: { <#some agrument#>  in 
 				try await <#SomeAPIClient.loadSomething#>(
 					<#some agrument#>: <#some agrument#> 
-				).map(\.<#asSomeModel#> )
+				).map(\.<#asSomeModel#>)
 	    	}
         )
     }
 
     static func buildTestEnvironment(for store: some Store<AppState>) -> Environment {
         Environment(
-	    	<#loadSomething#>: { _  in .testItem() }
+	    	<#loadSomething#>: { _ in .testItem() }
         )
     }
 }
